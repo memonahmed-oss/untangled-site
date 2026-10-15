@@ -162,7 +162,7 @@ footer a:hover{color:var(--text)}
 <tr><td><strong>Account information</strong></td><td>When you sign in with Google: your email address, the name you choose to use in the app, and a unique account ID. We do not receive your Google password.</td><td>To create your account, sign you in, and greet you by name.</td></tr>
 <tr><td><strong>Your content</strong></td><td>Everything you enter: tasks, homework, tests, events, reminders, birthdays, titles, notes, subjects, places, dates and times, repeat rules, completion status, and planned work sessions.</td><td>To run the app and keep your items in sync between your devices.</td></tr>
 <tr><td><strong>Your settings</strong></td><td>Your School schedule (classes and times), sleep schedule, reminder and planning preferences, and similar choices.</td><td>To plan your day and keep your settings when you change phones.</td></tr>
-<tr><td><strong>Approximate location</strong> (optional)</td><td>If you allow location access, the app reads your approximate location while you use it, only to show the weather on Home. You can instead pick a city in Settings and never grant location access.</td><td>To show current weather.</td></tr>
+<tr><td><strong>Location</strong> (optional)</td><td>If you allow location access, the app reads your device's location while you use it, only to show the weather on Home. It asks iOS for a location accurate to about one kilometer, and it refreshes the weather at most about once an hour. The coordinates are sent to the weather service (see "Who we share information with") but are not saved to your Untangled account; only the weather summary and city name are kept on your phone. You can instead pick a city in Settings and never grant location access.</td><td>To show current weather.</td></tr>
 <tr><td><strong>Connection data</strong></td><td>Like any internet service, our servers and the weather service receive your IP address and basic technical details when your phone connects.</td><td>To deliver the service and keep it secure.</td></tr>
 </table>
 <p>We do not collect your contacts, photos, microphone or camera data, health data, financial information, or advertising identifier.</p>
@@ -178,7 +178,7 @@ footer a:hover{color:var(--text)}
 <ul>
   <li><strong>Supabase</strong> (supabase.com) &mdash; our backend. It hosts sign-in and the database that stores your account, items, and settings. Your data is protected so each account can only read and write its own rows.</li>
   <li><strong>Google</strong> &mdash; used only for "Sign in with Google". Google tells us your email address and name. Google's handling of your data is governed by <a href="https://policies.google.com/privacy">Google's Privacy Policy</a>.</li>
-  <li><strong>Open-Meteo</strong> (open-meteo.com) &mdash; the weather service. If weather is shown, the app sends it the latitude and longitude of your location (or the city you picked) and receives a forecast. It does not receive your name, email, or any of your items.</li>
+  <li><strong>Open-Meteo</strong> (open-meteo.com) &mdash; the weather service. If weather is shown, the app sends it the latitude and longitude of your device's location (or of the city you picked) and receives a forecast. Like any internet request, it also sees your IP address. It does not receive your name, email, or any of your items, and we do not link the request to your account.</li>
   <li><strong>Apple</strong> &mdash; the app uses Apple's system services, including place lookup (to turn a city name into coordinates and coordinates into a city name), notifications, and iCloud/device backups, under <a href="https://www.apple.com/legal/privacy/">Apple's Privacy Policy</a>.</li>
 </ul>
 <p>We may also disclose information if required by law or to protect the rights, safety, or security of our users or the service.</p>
@@ -193,7 +193,7 @@ footer a:hover{color:var(--text)}
 <ul>
   <li><strong>Delete your account and data:</strong> in the app, go to Settings &rarr; Delete Account. This permanently deletes your account and your synced data from our servers and erases the app's data on that phone.</li>
   <li><strong>Sign out:</strong> Settings &rarr; Sign Out. Your data stays in your account for the next time you sign in.</li>
-  <li><strong>Location:</strong> you can turn location off at any time in iOS Settings &rarr; Privacy &amp; Security &rarr; Location Services &rarr; Untangled, or choose a city manually in the app.</li>
+  <li><strong>Location:</strong> you can turn location off at any time in iOS Settings &rarr; Privacy &amp; Security &rarr; Location Services &rarr; Untangled, choose to share only an approximate location there, or pick a city manually in the app.</li>
   <li><strong>Notifications:</strong> manage them in iOS Settings &rarr; Notifications &rarr; Untangled.</li>
   <li><strong>Access or correction:</strong> your items and settings are visible and editable inside the app. For anything else, or if you cannot use the in-app deletion, email us at <a href="mailto:untangledsupportteam@gmail.com">untangledsupportteam@gmail.com</a> and we will respond within 30 days.</li>
 </ul>
