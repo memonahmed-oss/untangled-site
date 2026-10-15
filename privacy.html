@@ -2,18 +2,131 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Untangled Privacy Policy</title>
+<meta name="description" content="How Untangled collects, uses and protects your information.">
+<meta name="theme-color" content="#000000">
 <style>
-  body { font: 16px/1.6 -apple-system, system-ui, sans-serif; max-width: 720px; margin: 0 auto; padding: 24px 16px 64px; color: #111; background: #fff; }
-  h1 { font-size: 28px; } h2 { font-size: 20px; margin-top: 32px; }
-  table { border-collapse: collapse; width: 100%; font-size: 15px; } td, th { border: 1px solid #ccc; padding: 8px; text-align: left; vertical-align: top; }
-  @media (prefers-color-scheme: dark) { body { background: #000; color: #eee; } td, th { border-color: #444; } a { color: #8ab4ff; } }
+:root{--bg:#000;--surface:#101012;--text:#f5f5f7;--muted:#a1a1a6;--faint:#6e6e73;--line:rgba(255,255,255,.12);
+  --font:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Helvetica Neue",Helvetica,Arial,sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}
+html{background:var(--bg);scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{background:var(--bg);color:var(--text);font-family:var(--font);-webkit-font-smoothing:antialiased;line-height:1.47;overflow-x:hidden}
+a{color:inherit}
+img{display:block;max-width:100%}
+.wrap{width:min(1120px,calc(100% - 48px));margin:0 auto}
+
+/* navigation */
+.nav{position:sticky;top:0;z-index:50;height:52px;background:rgba(0,0,0,.72);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);border-bottom:1px solid var(--line)}
+.nav .wrap{height:100%;display:flex;align-items:center;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:10px;font-size:17px;font-weight:600;letter-spacing:-.01em;text-decoration:none}
+.brand i{width:16px;height:16px;border-radius:50%;background:radial-gradient(circle at 36% 30%,#f2f2f2,#9a9a9a 38%,#3a3a3a 72%,#111)}
+.nav ul{display:flex;gap:28px;list-style:none}
+.nav a.l{font-size:13px;color:var(--muted);text-decoration:none;transition:color .2s}
+.nav a.l:hover{color:var(--text)}
+
+/* type */
+.eyebrow{font-size:14px;font-weight:600;color:var(--muted);letter-spacing:.01em;margin-bottom:14px}
+h1{font-size:clamp(46px,8.2vw,96px);line-height:1.02;letter-spacing:-.045em;font-weight:700}
+h2{font-size:clamp(32px,4.6vw,56px);line-height:1.07;letter-spacing:-.035em;font-weight:700}
+.lede{font-size:clamp(19px,2vw,24px);line-height:1.42;color:var(--muted);letter-spacing:-.01em;font-weight:400}
+.body{font-size:19px;line-height:1.5;color:var(--muted);letter-spacing:-.005em}
+.soon{display:inline-flex;align-items:center;gap:9px;margin-top:34px;padding:12px 22px;border-radius:999px;font-size:16px;font-weight:600;background:var(--text);color:#000}
+.soon .ap{width:17px;height:17px}
+
+/* hero */
+.hero{padding:88px 0 0;text-align:center;overflow:hidden}
+.hero h1{max-width:12ch;margin:0 auto}
+.hero .lede{max-width:34ch;margin:22px auto 0}
+.stage{position:relative;height:clamp(420px,62vw,760px);margin-top:64px;-webkit-mask-image:linear-gradient(#000 70%,transparent);mask-image:linear-gradient(#000 70%,transparent)}
+.stage .phone{position:absolute;bottom:0;left:50%}
+.stage .p-c{width:clamp(220px,30vw,340px);transform:translateX(-50%);z-index:2}
+.stage .p-l{width:clamp(180px,25vw,285px);transform:translateX(-128%) translateY(9%);z-index:1}
+.stage .p-r{width:clamp(180px,25vw,285px);transform:translateX(28%) translateY(9%);z-index:1}
+@media(max-width:700px){.stage .p-l,.stage .p-r{display:none}.stage{height:480px;margin-top:44px}}
+
+/* device */
+.phone{position:relative;aspect-ratio:402/874;padding:2.4%;border-radius:15% / 6.9%;background:#0a0a0b;
+  box-shadow:0 0 0 1.5px #3b3b3f,0 0 0 3px #151517,0 50px 90px -20px rgba(0,0,0,.9)}
+.phone img{width:100%;height:100%;object-fit:cover;border-radius:12.6% / 5.8%}
+.phone::after{content:"";position:absolute;top:2.1%;left:50%;width:29%;height:3.5%;transform:translateX(-50%);background:#000;border-radius:999px}
+
+/* feature rows */
+.feature{padding:clamp(80px,12vw,150px) 0}
+.feature .wrap{display:grid;grid-template-columns:1fr 1fr;gap:clamp(40px,8vw,120px);align-items:center}
+.feature.flip .copy{order:2}
+.feature .copy h2{max-width:12ch}
+.feature .copy .body{margin-top:22px;max-width:30em}
+.feature .art{display:flex;justify-content:center}
+.feature .art .phone{width:min(320px,70vw)}
+.feature.pair .wrap{grid-template-columns:1fr}
+.feature.pair .copy{text-align:center;margin:0 auto}
+.feature.pair .copy h2{max-width:none}
+.feature.pair .copy .body{margin-left:auto;margin-right:auto}
+.duo{display:flex;justify-content:center;gap:clamp(20px,5vw,64px);margin-top:64px}
+.duo .phone{width:min(300px,42vw)}
+.duo figcaption{display:none}
+.card{margin-top:56px;border-radius:28px;overflow:hidden;border:1px solid var(--line);background:var(--surface)}
+.card img{width:100%;height:auto}
+.feature.wide .copy{max-width:760px}
+.feature.wide .wrap{grid-template-columns:1fr}
+.wide .row{display:grid;grid-template-columns:1fr 1fr;gap:clamp(30px,6vw,90px);align-items:end}
+.wide .body{margin-top:0}
+@media(max-width:860px){
+  .feature .wrap,.wide .row{grid-template-columns:1fr}
+  .feature.flip .copy{order:0}
+  .feature .copy h2{max-width:none}
+  .feature .art{margin-top:8px}
+  .wide .row{gap:20px}
+}
+
+/* details */
+.details{padding:clamp(70px,10vw,120px) 0;border-top:1px solid var(--line)}
+.details h2{margin-bottom:56px;max-width:14ch}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0 clamp(24px,4vw,56px)}
+.grid div{padding:26px 0;border-top:1px solid var(--line)}
+.grid h3{font-size:19px;font-weight:600;letter-spacing:-.01em;margin-bottom:8px}
+.grid p{font-size:16px;color:var(--muted);line-height:1.5}
+@media(max-width:860px){.grid{grid-template-columns:1fr}}
+
+/* privacy summary + policy */
+.privacy-sum{padding:clamp(70px,10vw,120px) 0;border-top:1px solid var(--line);text-align:center}
+.privacy-sum h2{max-width:14ch;margin:0 auto}
+.privacy-sum .body{max-width:34em;margin:22px auto 0}
+.privacy-sum a.more{display:inline-block;margin-top:24px;font-size:17px;color:#fff;text-decoration:none;border-bottom:1px solid rgba(255,255,255,.4);padding-bottom:1px}
+#privacy{padding:clamp(70px,10vw,120px) 0;border-top:1px solid var(--line)}
+.doc{max-width:720px;margin:0 auto;color:var(--muted);font-size:16px;line-height:1.65}
+.doc .ph{font-size:clamp(30px,4vw,44px);letter-spacing:-.03em;color:var(--text);margin-bottom:12px;line-height:1.1}
+.doc h2{font-size:21px;letter-spacing:-.015em;color:var(--text);margin:36px 0 8px;line-height:1.25}
+.doc a{color:var(--text)}
+.doc ul{padding-left:20px;margin:8px 0}
+.doc li{margin:4px 0}
+.doc table{border-collapse:collapse;width:100%;font-size:15px;margin:14px 0}
+.doc td,.doc th{border:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top}
+.doc th{color:var(--text);font-weight:600}
+.doc strong{color:var(--text);font-weight:600}
+@media(max-width:700px){.doc table,.doc tbody,.doc tr,.doc td,.doc th{display:block;width:100%}.doc tr{margin-bottom:12px;border:1px solid var(--line);border-radius:12px;overflow:hidden}.doc td,.doc th{border:0;border-bottom:1px solid var(--line)}.doc tr:first-child{display:none}}
+
+footer{border-top:1px solid var(--line);padding:30px 0 44px;font-size:13px;color:var(--faint)}
+footer .wrap{display:flex;flex-wrap:wrap;gap:12px 28px;justify-content:space-between}
+footer a{color:var(--muted);text-decoration:none}
+footer a:hover{color:var(--text)}
+
+/* reveal */
+.js .rv{opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.7,.2,1),transform .9s cubic-bezier(.2,.7,.2,1)}
+.js .rv.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.js .rv{opacity:1;transform:none;transition:none}}
 </style>
 </head>
 <body>
-<p><a href="index.html">&larr; Untangled</a></p>
-<h1>Untangled Privacy Policy</h1>
+<header class="nav"><div class="wrap">
+  <a class="brand" href="index.html"><i></i>Untangled</a>
+  <ul><li><a class="l" href="index.html#privacy">Privacy</a></li></ul>
+</div></header>
+
+<main><section style="padding:64px 0 90px">
+  <div class="wrap"><div class="doc">
+<h1 class="ph">Privacy Policy</h1>
 <p><strong>Effective date:</strong> October 15, 2026 &nbsp;·&nbsp; <strong>Last updated:</strong> October 15, 2026</p>
 
 <p>Untangled ("the app", "we") is an iPhone app that helps you keep track of tasks, homework, events, and your school day. This policy explains what information the app collects, how it is used, who it is shared with, and the choices you have. It is operated by Ahmed Memon ("we"). Contact: <a href="mailto:untangledsupportteam@gmail.com">untangledsupportteam@gmail.com</a>.</p>
@@ -83,5 +196,12 @@
 
 <h2>12. Contact</h2>
 <p>Questions or requests: <a href="mailto:untangledsupportteam@gmail.com">untangledsupportteam@gmail.com</a></p>
+
+  </div></div>
+</section></main>
+<footer><div class="wrap">
+  <span>&copy; 2026 Ahmed Memon. Untangled is made for iPhone.</span>
+  <span><a href="index.html#privacy">Privacy Policy</a> &nbsp;·&nbsp; <a href="mailto:untangledsupportteam@gmail.com">Contact</a></span>
+</div></footer>
 </body>
 </html>
