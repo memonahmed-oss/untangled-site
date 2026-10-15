@@ -51,15 +51,14 @@ h1,h2{text-wrap:balance}
 .soon .ap{width:17px;height:17px}
 
 /* hero */
-.hero{padding:88px 0 0;text-align:center;overflow:hidden}
+.hero{padding:88px 0 clamp(70px,9vw,120px);text-align:center;overflow:hidden}
 .hero h1{max-width:12ch;margin:0 auto}
 .hero .lede{max-width:34ch;margin:22px auto 0}
-.stage{position:relative;height:clamp(420px,62vw,760px);margin-top:64px;-webkit-mask-image:linear-gradient(#000 70%,transparent);mask-image:linear-gradient(#000 70%,transparent)}
-.stage .phone{position:absolute;bottom:0;left:50%}
-.stage .p-c{width:clamp(220px,30vw,340px);transform:translateX(-50%);z-index:2}
-.stage .p-l{width:clamp(180px,25vw,285px);transform:translateX(-128%) translateY(9%);z-index:1}
-.stage .p-r{width:clamp(180px,25vw,285px);transform:translateX(28%) translateY(9%);z-index:1}
-@media(max-width:700px){.stage .p-l,.stage .p-r{display:none}.stage{height:480px;margin-top:44px}}
+.stage{display:flex;justify-content:center;align-items:flex-end;gap:clamp(14px,3.2vw,44px);margin-top:64px;padding:0 24px}
+.stage .phone{flex:none}
+.stage .p-c{width:clamp(220px,28vw,340px)}
+.stage .p-l,.stage .p-r{width:clamp(170px,22vw,285px)}
+@media(max-width:700px){.stage .p-l,.stage .p-r{display:none}.stage{margin-top:44px}.stage .p-c{width:min(76vw,300px)}}
 
 /* device */
 .phone{position:relative;display:block;aspect-ratio:472/1000;border-radius:15% / 7.08%;background:#0a0a0b;
@@ -87,7 +86,7 @@ h1,h2{text-wrap:balance}
 .card img{width:100%;height:auto}
 .feature.wide .copy{max-width:760px}
 .feature.wide .wrap{grid-template-columns:1fr}
-.wide .row{display:grid;grid-template-columns:1fr 1fr;gap:clamp(30px,6vw,90px);align-items:end}
+.wide .row{display:grid;grid-template-columns:1fr 1fr;gap:clamp(30px,6vw,90px);align-items:center}
 .wide .body{margin-top:0}
 @media(max-width:860px){
   .feature .wrap,.wide .row{grid-template-columns:1fr}
@@ -152,7 +151,7 @@ footer a:hover{color:var(--text)}
   <div class="stage rv">
     <figure class="phone p-l"><img src="screens/tasks.jpg" alt="Untangled Tasks screen" width="900" height="1957"></figure>
     <figure class="phone p-c"><img src="screens/home.jpg" alt="Untangled Home screen showing the current class" width="900" height="1957"></figure>
-    <figure class="phone p-r"><img src="screens/day2.jpg" alt="Untangled Calendar day view with school classes beside events" width="900" height="1957"></figure>
+    <figure class="phone p-r"><img src="screens/day.jpg" alt="Untangled Calendar showing today with the all-day list" width="900" height="1957"></figure>
   </div>
 </section>
 
