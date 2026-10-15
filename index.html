@@ -1,0 +1,615 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Untangled — Your day, untangled</title>
+<meta name="description" content="Untangled is the calm planner for school, life and everything in between. Made for iPhone.">
+<style>
+  :root{--fg:#f3f3f5;--dim:rgba(243,243,245,.62);--faint:rgba(243,243,245,.36);--line:rgba(255,255,255,.12);
+    --silver:linear-gradient(180deg,#fff 0%,#cfd1d8 55%,#8d909a 100%)}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{background:#030304}
+  body{background:#030304;color:var(--fg);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Inter",system-ui,sans-serif;-webkit-font-smoothing:antialiased;line-height:1.5}
+  #gl{position:fixed;inset:0;width:100%;height:100%;display:block}
+  .vig{position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse at 50% 46%,transparent 52%,rgba(0,0,0,.55) 100%),linear-gradient(180deg,rgba(0,0,0,.35),transparent 18%,transparent 82%,rgba(0,0,0,.45))}
+  #scroller{position:relative;width:1px}
+  .mark{position:fixed;top:26px;left:30px;z-index:20;display:flex;align-items:center;gap:11px;font-size:11.5px;letter-spacing:.34em;text-transform:uppercase;color:var(--dim);text-decoration:none}
+  .mark i{width:14px;height:14px;border-radius:50%;background:radial-gradient(circle at 36% 30%,#fff,#b8b8b8 30%,#555 65%,#111);box-shadow:0 0 14px rgba(255,255,255,.45)}
+  .prog{position:fixed;right:26px;top:50%;height:120px;width:1px;transform:translateY(-50%);background:var(--line);z-index:20}
+  .prog b{position:absolute;left:-.5px;top:0;width:2px;height:0;background:#fff;box-shadow:0 0 10px #fff}
+  .dock{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);z-index:30;display:flex;align-items:flex-end;gap:6px;padding:9px 12px;border-radius:24px;background:linear-gradient(180deg,rgba(255,255,255,.11),rgba(255,255,255,.035));backdrop-filter:blur(28px) saturate(1.5);-webkit-backdrop-filter:blur(28px) saturate(1.5);border:1px solid rgba(255,255,255,.15);box-shadow:0 20px 60px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.22)}
+  .dock a{position:relative;width:44px;height:44px;border-radius:14px;display:grid;place-items:center;color:var(--dim);text-decoration:none;transition:transform .28s cubic-bezier(.3,1.6,.5,1),background .3s,color .3s;cursor:pointer}
+  .dock a svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+  .dock a:hover{transform:translateY(-8px) scale(1.22);color:#fff;background:rgba(255,255,255,.1)}
+  .dock a.on{color:#000;background:linear-gradient(180deg,#fff,#c0c2c9);box-shadow:0 0 22px rgba(255,255,255,.4)}
+  .dock a span{position:absolute;bottom:58px;left:50%;transform:translate(-50%,6px);padding:5px 10px;border-radius:9px;font-size:11px;letter-spacing:.06em;white-space:nowrap;background:rgba(10,10,12,.88);border:1px solid var(--line);color:#fff;opacity:0;pointer-events:none;transition:.22s}
+  .dock a:hover span{opacity:1;transform:translate(-50%,0)}
+  .dock .sep{width:1px;height:24px;background:var(--line);margin:0 4px 10px;align-self:center}
+  .beat{position:fixed;z-index:10;opacity:0;pointer-events:none;will-change:opacity,transform;max-width:min(460px,39vw)}
+  .beat.L{left:max(6vw,calc(50% - 640px));top:50%}
+  .beat.R{right:max(6vw,calc(50% - 640px));top:50%}
+  .beat.B{left:0;right:0;margin:0 auto;bottom:15vh;max-width:min(680px,88vw);text-align:center}
+  .beat.T{left:max(6vw,calc(50% - 640px));top:14vh;max-width:min(520px,42vw)}
+  .beat .eyebrow{font-size:11.5px;letter-spacing:.26em;text-transform:uppercase;color:var(--faint);margin-bottom:18px}
+  .beat h1,.beat h2{font-weight:700;letter-spacing:-.04em;line-height:1.04;padding:.04em .06em .16em 0;margin-bottom:-.08em;overflow:visible;background:var(--silver);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .beat h1{font-size:clamp(44px,6.2vw,92px)}
+  .beat h2{font-size:clamp(32px,4vw,58px)}
+  .beat p{margin-top:16px;font-size:clamp(15px,1.2vw,18px);color:var(--dim);max-width:380px}
+  .beat.B p{margin-left:auto;margin-right:auto}
+  .pts{list-style:none;margin-top:22px;display:flex;flex-wrap:wrap;gap:8px;max-width:440px}
+  .pts li{padding:7px 14px;border-radius:999px;font-size:clamp(12px,.95vw,14px);color:var(--fg);background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);line-height:1.3;white-space:nowrap}
+  .beat .st{will-change:opacity,transform}
+  .beat.T{max-width:min(540px,44vw)}
+  .badge{display:inline-block;margin-top:26px;padding:15px 30px;border-radius:999px;font-size:15px;font-weight:600;background:rgba(255,255,255,.08);border:1px solid var(--line);backdrop-filter:blur(14px);position:relative;overflow:hidden}
+  .badge::after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.25) 50%,transparent 70%);transform:translateX(-100%);animation:shine 3.6s infinite}
+  @keyframes shine{to{transform:translateX(100%)}}
+  .hint{position:fixed;left:50%;bottom:92px;transform:translateX(-50%);z-index:12;font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--faint);text-align:center}
+  .hint::after{content:"";display:block;width:1px;height:34px;margin:10px auto 0;background:linear-gradient(var(--faint),transparent);animation:drip 2.2s infinite}
+  @keyframes drip{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+  #load{position:fixed;inset:0;z-index:100;background:#030304;display:grid;place-items:center;transition:opacity 1s;color:var(--faint);font-size:12px;letter-spacing:.3em;text-transform:uppercase}
+  #load.off{opacity:0;pointer-events:none}
+  #fallback{display:none;position:fixed;inset:0;z-index:99;place-items:center;text-align:center;padding:30px;color:var(--dim);background:#030304}
+  @media(max-width:860px){
+    .beat.L,.beat.R,.beat.T{left:22px;right:22px;top:auto;bottom:118px;margin-top:0;max-width:none}
+    .beat.T{bottom:118px;top:auto}
+    .beat.B{bottom:118px}
+    .beat h1{font-size:clamp(38px,11vw,56px)}.beat h2{font-size:clamp(26px,7.5vw,38px)}
+    .beat p{font-size:14px;margin-top:10px}.beat .eyebrow{margin-bottom:10px}
+    .pts{gap:6px;margin-top:14px}.pts li{font-size:12px;padding:6px 11px}
+    .prog{display:none}.hint{bottom:100px}
+    .dock a{width:40px;height:40px}.dock{gap:2px;padding:8px}
+  }
+  .legal{position:fixed;left:30px;bottom:30px;z-index:31;font-size:11.5px;letter-spacing:.12em;color:var(--faint);text-decoration:none}
+  .legal:hover{color:#fff}
+  @media(max-width:860px){.legal{left:auto;right:22px;top:30px;bottom:auto}}
+  .addcard{position:fixed;z-index:11;opacity:0;pointer-events:none;right:max(6vw,calc(50% - 640px));top:56%;width:min(400px,38vw);transform:translateY(-50%);will-change:opacity}
+  .ac-lab{font-size:10.5px;letter-spacing:.24em;color:var(--faint);margin:0 0 10px 4px}
+  .ac-in{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:999px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.16);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);min-height:60px}
+  .ac-plus{flex:none;width:40px;height:40px;border-radius:50%;background:linear-gradient(180deg,#fff,#c9cbd2);display:grid;place-items:center;box-shadow:0 0 22px rgba(255,255,255,.35)}
+  .ac-plus svg{width:20px;height:20px;fill:none;stroke:#000;stroke-width:2.4;stroke-linecap:round}
+  .ac-txt{font-size:clamp(14px,1.15vw,17px);color:#fff;white-space:nowrap;overflow:hidden}
+  .ac-txt:empty::before{content:"Add something…";color:var(--faint)}
+  .ac-caret{width:1.5px;height:20px;background:#fff;margin-left:-8px;animation:blink 1.1s steps(1) infinite}
+  @keyframes blink{50%{opacity:0}}
+  .ac-arrow{text-align:center;color:var(--faint);font-size:20px;margin:14px 0 12px}
+  .ac-out{padding:16px 18px;border-radius:22px;background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.14);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+  .ac-title{font-size:clamp(17px,1.5vw,21px);font-weight:700;color:#fff;letter-spacing:-.01em}
+  .ac-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+  .ac-tags span{padding:6px 13px;border-radius:999px;font-size:13px;color:#fff;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);opacity:0;transform:translateY(8px)}
+  @media(max-width:860px){.addcard{left:22px;right:22px;width:auto;top:17vh;transform:none}}
+  .badge .ap{width:17px;height:17px;vertical-align:-3px;margin-right:9px}
+  .plink{display:inline-block;margin-top:16px;font-size:13px;color:var(--dim);text-decoration:underline;text-underline-offset:3px;pointer-events:auto}
+  .plink:hover{color:#fff}
+  #privacy{position:relative;z-index:40;background:#030304;border-top:1px solid var(--line);padding:90px 22px 120px}
+  #privacy .doc{max-width:720px;margin:0 auto;color:var(--dim);font-size:16px;line-height:1.65}
+  #privacy h1{font-size:34px;letter-spacing:-.03em;color:#fff;margin:6px 0 10px}
+  #privacy h2{font-size:20px;color:#fff;margin:34px 0 8px;letter-spacing:-.01em}
+  #privacy a{color:#fff}
+  #privacy ul{padding-left:20px;margin:8px 0}
+  #privacy table{border-collapse:collapse;width:100%;font-size:14.5px;margin:12px 0}
+  #privacy td,#privacy th{border:1px solid var(--line);padding:9px 10px;text-align:left;vertical-align:top}
+  #privacy th{color:#fff}
+  #privacy .top{display:inline-block;margin-top:40px;font-size:13px}
+  @media(prefers-reduced-motion:reduce){.hint::after,.badge::after{animation:none}}
+</style>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
+</head>
+<body>
+<canvas id="gl"></canvas>
+<div class="vig"></div>
+<div id="load">Untangled</div>
+<div id="fallback"><div>This experience needs WebGL and an internet connection.<br>Try a current version of Safari, Chrome or Edge.</div></div>
+<div id="scroller"></div>
+
+<a class="mark" href="#" id="top"><i></i>Untangled</a>
+<div class="prog"><b id="pfill"></b></div>
+<div class="hint" id="hint">Scroll</div>
+
+<nav class="dock" id="dock">
+  <a data-t="0" class="on"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M8.5 9.5a4.5 4.5 0 0 1 3-2"/></svg><span>Untangled</span></a>
+  <a data-t="1.3"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg><span>Add</span></a>
+  <a data-t="3.75"><svg viewBox="0 0 24 24"><path d="M4 11l8-7 8 7v9H4z"/></svg><span>Home</span></a>
+  <i class="sep"></i>
+  <a data-t="6.3"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.2 4.2L19 7"/></svg><span>Tasks</span></a>
+  <a data-t="7.7"><svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="2.4"/><path d="M4 10h16M9 3v4M15 3v4"/></svg><span>Calendar</span></a>
+  <a data-t="9.1"><svg viewBox="0 0 24 24"><path d="M5 6h14M5 12h14M5 18h9"/></svg><span>Plan</span></a>
+  <a data-t="10.5"><svg viewBox="0 0 24 24"><path d="M2.5 9.5L12 5l9.5 4.5L12 14z"/><path d="M6.5 11.8V16c1.4 1.4 3.4 2 5.5 2s4.1-.6 5.5-2v-4.2"/></svg><span>School</span></a>
+  <i class="sep"></i>
+  <a data-t="16.3"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2.4"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg><span>Private</span></a>
+</nav>
+
+<div class="beat L" data-r="-1,.95"><div class="eyebrow">Untangled</div><h1>Your day,<br>untangled.</h1><p>One calm place for school, homework, events and everything you need to do. Made for iPhone.</p><ul class="pts"><li>Tasks</li><li>School</li><li>Calendar</li><li>Plan</li></ul></div>
+<div class="beat R" data-r=".8,2"><div class="eyebrow">Everything in one place</div><h2>Add it once.<br>It finds its place.</h2><p>Homework, tests, events, birthdays, reminders. Each one gets the right details and the right wording.</p><ul class="pts"><li>Homework</li><li>Tests</li><li>Events</li><li>Reminders</li></ul></div>
+<div class="beat L" data-r="1.95,3.2"><div class="eyebrow">1 · Add</div><h2>Tap +.<br>Type it like you’d say it.</h2><p>Untangled works out what it is, which class it’s for, and the day. No forms to fill in.</p><ul class="pts"><li>Dates &amp; times</li><li>Places</li><li>Repeats</li><li>Same as last time</li></ul></div>
+<div class="beat R" data-r="3.75,5"><div class="eyebrow">2 · Home</div><h2>A glance,<br>not a page.</h2><p>Home shows what’s happening now: your class, what’s due, and the one thing to do next.</p><ul class="pts"><li>Class status</li><li>Due today</li><li>Next up</li></ul></div>
+<div class="beat L" data-r="5,6.2"><div class="eyebrow">Next up</div><h2>One line.<br>The right one.</h2><p>Untangled picks the best next step: a test to study for, homework due, or a free window.</p><ul class="pts"><li>Tests first</li><li>Work Sessions</li><li>Free-time finder</li></ul></div>
+<div class="beat L" data-r="6.3,7.6"><div class="eyebrow">3 · Tasks</div><h2>Everything<br>you need to do.</h2><p>See it by day, or by class. Swipe right to finish. Press and hold for more.</p><ul class="pts"><li>By day</li><li>By class</li><li>Swipe to finish</li></ul></div>
+<div class="beat L" data-r="7.7,9.0"><div class="eyebrow">4 · Calendar</div><h2>Your day,<br>on one clock.</h2><p>Day view shows school as a slim lane beside your events, so you can see what’s free.</p><ul class="pts"><li>Day</li><li>Week</li><li>Month</li><li>Agenda</li></ul></div>
+<div class="beat L" data-r="9.1,10.4"><div class="eyebrow">5 · Plan</div><h2>Plan<br>your day.</h2><p>Today’s plan lines up your homework inside your homework time. Start now, do it later, or skip it today.</p><ul class="pts"><li>Start now</li><li>Later</li><li>Not today</li><li>Real timing</li></ul></div>
+<div class="beat L" data-r="10.5,11.8"><div class="eyebrow">6 · School</div><h2>School, live.</h2><p>Your class, the time left and what’s next. Always up to date on Home and in the Dynamic Island.</p><ul class="pts"><li>Class periods</li><li>Dynamic Island</li><li>Half-day overrides</li></ul></div>
+<div class="beat L" data-r="11.9,13.2"><div class="eyebrow">Everywhere</div><h2>On your Home Screen, too.</h2><p>Know what’s next without opening the app.</p><ul class="pts"><li>Widgets</li><li>Lock Screen</li><li>Live Activity</li></ul></div>
+<div class="beat T" data-r="13.5,14.9"><div class="eyebrow">Reminders</div><h2>A nudge at the right time.</h2><p>Reminders for what’s due, class alerts and a wind-down before bedtime. Turn any of it off.</p><ul class="pts"><li>Smart reminders</li><li>Class alerts</li><li>Bedtime</li></ul></div>
+<div class="beat T" data-r="14.9,16.3"><div class="eyebrow">Sleep</div><h2>Built around your sleep.</h2><p>Set your schedule once. Plans and suggested times never run into sleep.</p><ul class="pts"><li>Sleep schedule</li><li>Wind-down</li><li>Never over bedtime</li></ul></div>
+<div class="beat T" data-r="16.3,17.7"><div class="eyebrow">Private</div><h2>Private by design.</h2><p>No ads and no tracking. Your account syncs only your own data, and you can delete it any time.</p><ul class="pts"><li>No ads</li><li>No tracking</li><li>Delete anytime</li></ul></div>
+<div class="beat B" data-r="17.8,22"><div class="eyebrow">Untangled</div><h1>Your life,<br>untangled.</h1><p>Tasks, school, events and your plan, calm and in one place.</p><span class="badge"><svg class="ap" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"/></svg>Coming to the App Store soon</span><br><a class="plink" href="#privacy">Read the privacy policy</a></div>
+
+<div class="addcard" id="addcard" aria-hidden="true">
+  <div class="ac-lab">TAP THE PLUS</div>
+  <div class="ac-in"><span class="ac-plus"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span><span class="ac-txt" id="acTxt"></span><i class="ac-caret"></i></div>
+  <div class="ac-arrow">↓</div>
+  <div class="ac-lab">UNTANGLED SORTS IT OUT</div>
+  <div class="ac-out" id="acOut"><div class="ac-title">Math homework</div><div class="ac-tags"><span id="acT1">Homework</span><span id="acT2">Math</span><span id="acT3">Due Thursday</span></div></div>
+</div>
+
+<a class="legal" href="#privacy">Privacy policy</a>
+
+<section id="privacy"><div class="doc">
+<h1>Untangled Privacy Policy</h1>
+<p><strong>Effective date:</strong> October 15, 2026 &nbsp;·&nbsp; <strong>Last updated:</strong> October 15, 2026</p>
+
+<p>Untangled ("the app", "we") is an iPhone app that helps you keep track of tasks, homework, events, and your school day. This policy explains what information the app collects, how it is used, who it is shared with, and the choices you have. It is operated by Ahmed Memon ("we"). Contact: <a href="mailto:untangledsupportteam@gmail.com">untangledsupportteam@gmail.com</a>.</p>
+
+<h2>The short version</h2>
+<ul>
+  <li>We collect only what the app needs to work: your sign-in details and the things you put in the app.</li>
+  <li>We do not sell your data, show ads, or track you across other apps or websites.</li>
+  <li>There are no analytics or advertising tools in the app.</li>
+  <li>You can delete your account and all of your data from inside the app at any time.</li>
+</ul>
+
+<h2>1. Information we collect</h2>
+<table>
+<tr><th>Information</th><th>What it is</th><th>Why</th></tr>
+<tr><td><strong>Account information</strong></td><td>When you sign in with Google: your email address, the name you choose to use in the app, and a unique account ID. We do not receive your Google password.</td><td>To create your account, sign you in, and greet you by name.</td></tr>
+<tr><td><strong>Your content</strong></td><td>Everything you enter: tasks, homework, tests, events, reminders, birthdays, titles, notes, subjects, places, dates and times, repeat rules, completion status, and planned work sessions.</td><td>To run the app and keep your items in sync between your devices.</td></tr>
+<tr><td><strong>Your settings</strong></td><td>Your School schedule (classes and times), sleep schedule, reminder and planning preferences, and similar choices.</td><td>To plan your day and keep your settings when you change phones.</td></tr>
+<tr><td><strong>Approximate location</strong> (optional)</td><td>If you allow location access, the app reads your approximate location while you use it, only to show the weather on Home. You can instead pick a city in Settings and never grant location access.</td><td>To show current weather.</td></tr>
+<tr><td><strong>Connection data</strong></td><td>Like any internet service, our servers and the weather service receive your IP address and basic technical details when your phone connects.</td><td>To deliver the service and keep it secure.</td></tr>
+</table>
+<p>We do not collect your contacts, photos, microphone or camera data, health data, financial information, or advertising identifier.</p>
+
+<h2>2. Information stored only on your phone</h2>
+<p>Some data never leaves your device: notification scheduling, the "last time" durations the app remembers for your work sessions, one-time tips you have seen, and a local copy of your items used by the app and its widgets and Lock Screen / Dynamic Island Live Activity (shared with the app through an on-device App Group container). Notifications are scheduled locally on your phone; we do not send push notifications from a server.</p>
+
+<h2>3. How we use information</h2>
+<p>We use your information only to provide and improve the app's features: signing you in, storing and syncing your items and settings, scheduling reminders on your device, planning your day, and showing weather. We do not use it for advertising, profiling, or sale.</p>
+
+<h2>4. Who we share information with</h2>
+<p>We do not sell or rent your information. We use the following service providers, who process data only to provide their service:</p>
+<ul>
+  <li><strong>Supabase</strong> (supabase.com) &mdash; our backend. It hosts sign-in and the database that stores your account, items, and settings. Your data is protected so each account can only read and write its own rows.</li>
+  <li><strong>Google</strong> &mdash; used only for "Sign in with Google". Google tells us your email address and name. Google's handling of your data is governed by <a href="https://policies.google.com/privacy">Google's Privacy Policy</a>.</li>
+  <li><strong>Open-Meteo</strong> (open-meteo.com) &mdash; the weather service. If weather is shown, the app sends it the latitude and longitude of your location (or the city you picked) and receives a forecast. It does not receive your name, email, or any of your items.</li>
+  <li><strong>Apple</strong> &mdash; the app uses Apple's system services, including place lookup (to turn a city name into coordinates and coordinates into a city name), notifications, and iCloud/device backups, under <a href="https://www.apple.com/legal/privacy/">Apple's Privacy Policy</a>.</li>
+</ul>
+<p>We may also disclose information if required by law or to protect the rights, safety, or security of our users or the service.</p>
+
+<h2>5. Tracking</h2>
+<p>Untangled does not track you. It contains no advertising, no third-party analytics, and no tools that follow you across other companies' apps or websites.</p>
+
+<h2>6. How long we keep data</h2>
+<p>We keep your account and content for as long as your account exists. When you delete an item it is marked deleted so your other devices can learn of the deletion; it is removed for good when you delete your account. If you delete your account, we permanently delete your account and all of your items from our servers.</p>
+
+<h2>7. Your choices and rights</h2>
+<ul>
+  <li><strong>Delete your account and data:</strong> in the app, go to Settings &rarr; Delete Account. This permanently deletes your account and your synced data from our servers and erases the app's data on that phone.</li>
+  <li><strong>Sign out:</strong> Settings &rarr; Sign Out. Your data stays in your account for the next time you sign in.</li>
+  <li><strong>Location:</strong> you can turn location off at any time in iOS Settings &rarr; Privacy &amp; Security &rarr; Location Services &rarr; Untangled, or choose a city manually in the app.</li>
+  <li><strong>Notifications:</strong> manage them in iOS Settings &rarr; Notifications &rarr; Untangled.</li>
+  <li><strong>Access or correction:</strong> your items and settings are visible and editable inside the app. For anything else, or if you cannot use the in-app deletion, email us at <a href="mailto:untangledsupportteam@gmail.com">untangledsupportteam@gmail.com</a> and we will respond within 30 days.</li>
+</ul>
+<p>Depending on where you live (for example, the EU/UK or California), you may have additional rights to access, correct, delete, or export your data, or to object to processing. Contact us to use them. Where GDPR applies, our legal basis is performing the service you asked for (account and sync) and your consent (location).</p>
+
+<h2>8. Security</h2>
+<p>Data is sent over encrypted connections (HTTPS). Your sign-in is stored in the iOS Keychain. Our database allows each account to access only its own data. No system is perfectly secure, but we work to protect your information.</p>
+
+<h2>9. Children</h2>
+<p>Untangled is designed for students and may be used by teenagers. It is not directed to children under 13, and we do not knowingly collect personal information from children under 13 (or under the minimum age of digital consent in your country). If you believe a child has given us personal information, contact us and we will delete it. [CONFIRM: your intended minimum age. Sign-in with Google already requires users to meet Google's age requirements.]</p>
+
+<h2>10. International transfers</h2>
+<p>Our providers may process data in the United States or other countries. By using the app you understand your information may be transferred to and stored in countries other than your own. [CONFIRM: your Supabase project's region.]</p>
+
+<h2>11. Changes to this policy</h2>
+<p>If we change this policy, we will update the date above and, for significant changes, tell you in the app. Continued use after a change means you accept the updated policy.</p>
+
+<h2>12. Contact</h2>
+<p>Questions or requests: <a href="mailto:untangledsupportteam@gmail.com">untangledsupportteam@gmail.com</a></p>
+<a class="top" href="#" id="toTop">Back to top ↑</a>
+</div></section>
+
+<script type="module">
+import * as THREE from 'three';
+import {RoundedBoxGeometry} from 'three/addons/geometries/RoundedBoxGeometry.js';
+
+const T_END=20;
+const clamp=(x,a=0,b=1)=>Math.min(b,Math.max(a,x));
+const sm=t=>{t=clamp(t);return t*t*(3-2*t)};
+const seg=(t,a,b)=>clamp((t-a)/(b-a));
+const lerp=(a,b,t)=>a+(b-a)*t;
+const $=id=>document.getElementById(id);
+
+/* ---------------- renderer ---------------- */
+const canvas=$('gl');
+let renderer;
+try{renderer=new THREE.WebGLRenderer({canvas,antialias:true,powerPreference:'high-performance'})}catch(e){$('fallback').style.display='grid';$('load').style.display='none';throw e}
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+renderer.outputColorSpace=THREE.SRGBColorSpace;
+renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.05;
+renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+const scene=new THREE.Scene();
+scene.background=new THREE.Color(0x030304);
+scene.fog=new THREE.Fog(0x030304,110,340);
+const cam=new THREE.PerspectiveCamera(32,1,1,1200);
+const MAXANI=renderer.capabilities.getMaxAnisotropy();
+
+/* ---------------- dark studio environment (softboxes) ---------------- */
+function studioEnv(){
+  const es=new THREE.Scene();
+  const dome=new THREE.SphereGeometry(300,48,24);const col=[];const pa=dome.attributes.position;
+  for(let i=0;i<pa.count;i++){const y=pa.getY(i)/300,x=pa.getX(i)/300,z=pa.getZ(i)/300;const vv=.015+Math.pow(clamp((y+.2)/1.2),1.6)*.16+.10*Math.exp(-Math.pow((y-.25)/.09,2))+.04*Math.max(0,z);col.push(vv,vv,vv*1.04)}
+  dome.setAttribute('color',new THREE.Float32BufferAttribute(col,3));
+  es.add(new THREE.Mesh(dome,new THREE.MeshBasicMaterial({vertexColors:true,side:THREE.BackSide})));
+  const panel=(w,h,i,pos)=>{const m=new THREE.Mesh(new THREE.PlaneGeometry(w,h),new THREE.MeshBasicMaterial({color:new THREE.Color(i,i,i),side:THREE.DoubleSide}));m.position.set(...pos);m.lookAt(0,0,0);es.add(m)};
+  panel(280,160,2.6,[0,170,20]);      // overhead
+  panel(60,280,6,[-200,30,40]);    // tall left strip
+  panel(30,260,3.2,[210,20,-30]);     // right strip
+  panel(320,60,1.1,[0,40,-240]);    // back bounce
+  panel(260,90,1.5,[0,70,210]);     // broad front-top sheen (what the camera sees in the chrome)
+  panel(120,160,.8,[-150,10,170]); // front-left fill
+  panel(120,160,.55,[170,0,150]);   // front-right fill
+  panel(240,140,.35,[0,10,260]);    // wide soft front fill (shapes the face of the chrome)
+  panel(400,400,.1,[0,-120,0]);     // floor bounce
+  const pm=new THREE.PMREMGenerator(renderer);
+  const tex=pm.fromScene(es,0.02,1,1000).texture;pm.dispose();
+  return tex;
+}
+scene.environment=studioEnv();
+
+const spot=new THREE.SpotLight(0xffffff,.7,0,.55,1,0);
+spot.position.set(20,150,50);spot.castShadow=true;
+spot.shadow.mapSize.set(2048,2048);spot.shadow.radius=9;spot.shadow.bias=-.0004;spot.shadow.camera.near=40;spot.shadow.camera.far=400;
+scene.add(spot,spot.target);
+const rim=new THREE.DirectionalLight(0xcfd6ff,.5);rim.position.set(-60,40,-120);scene.add(rim);
+
+const floorMat=new THREE.MeshStandardMaterial({color:0x08080a,roughness:.55,metalness:.35,envMapIntensity:.08});
+const floor=new THREE.Mesh(new THREE.PlaneGeometry(2600,2600),floorMat);
+floor.rotation.x=-Math.PI/2;floor.position.set(70,0,0);floor.receiveShadow=true;scene.add(floor);
+
+/* ---------------- helpers ---------------- */
+function rrShape(w,h,r){const s=new THREE.Shape(),x=-w/2,y=-h/2;
+  s.moveTo(x+r,y);s.lineTo(x+w-r,y);s.absarc(x+w-r,y+r,r,-Math.PI/2,0);s.lineTo(x+w,y+h-r);s.absarc(x+w-r,y+h-r,r,0,Math.PI/2);
+  s.lineTo(x+r,y+h);s.absarc(x+r,y+h-r,r,Math.PI/2,Math.PI);s.lineTo(x,y+r);s.absarc(x+r,y+r,r,Math.PI,Math.PI*1.5);return s}
+function rrPlane(w,h,r){const g=new THREE.ShapeGeometry(rrShape(w,h,r),24);const p=g.attributes.position,uv=g.attributes.uv;
+  for(let i=0;i<p.count;i++)uv.setXY(i,(p.getX(i)+w/2)/w,(p.getY(i)+h/2)/h);return g}
+function slab(w,h,r,depth,bev){const g=new THREE.ExtrudeGeometry(rrShape(w-2*bev,h-2*bev,Math.max(.01,r-bev)),{depth:depth-2*bev,bevelEnabled:true,bevelThickness:bev,bevelSize:bev,bevelSegments:7,curveSegments:28});
+  g.translate(0,0,-(depth-2*bev)/2);return g}
+function canvasTex(c){const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;t.anisotropy=MAXANI;t.generateMipmaps=true;t.minFilter=THREE.LinearMipmapLinearFilter;return t}
+function noiseTex(size,base,blobs,speck){
+  const c=document.createElement('canvas');c.width=c.height=size;const x=c.getContext('2d');
+  x.fillStyle=`rgb(${base},${base},${base})`;x.fillRect(0,0,size,size);
+  for(let i=0;i<blobs;i++){const r=20+Math.random()*120,px=Math.random()*size,py=Math.random()*size;
+    const g=x.createRadialGradient(px,py,0,px,py,r);const v=Math.round(base+Math.random()*34);g.addColorStop(0,`rgba(${v},${v},${v},.30)`);g.addColorStop(1,'rgba(0,0,0,0)');x.fillStyle=g;x.fillRect(px-r,py-r,r*2,r*2)}
+  for(let i=0;i<speck;i++){const v=Math.round(base+Math.random()*30-10);x.fillStyle=`rgba(${v},${v},${v},.22)`;x.fillRect(Math.random()*size,Math.random()*size,1+Math.random()*2,1+Math.random()*2)}
+  for(let i=0;i<60;i++){const v=base+45;x.strokeStyle=`rgba(${v},${v},${v},.10)`;x.lineWidth=.6;x.beginPath();const px=Math.random()*size,py=Math.random()*size,a=Math.random()*6.28,l=30+Math.random()*120;x.moveTo(px,py);x.lineTo(px+Math.cos(a)*l,py+Math.sin(a)*l);x.stroke()}
+  const t=new THREE.CanvasTexture(c);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.anisotropy=MAXANI;return t}
+
+/* ---------------- THE ORB: soft-glowing silver (no room reflections) ---------------- */
+const orbU={uTime:{value:0},uAmp:{value:1},uGlow:{value:.7},uScroll:{value:0},uLight:{value:new THREE.Vector3(-.5,.7,.6)}};
+const ORB_VS=`
+uniform float uTime;uniform float uAmp;
+varying vec3 vN;varying vec3 vV;varying vec3 vP;
+float disp(vec3 n){float t=uTime;
+  return uAmp*.04*(.22*sin(3.1*n.x+t*.5+sin(2.3*n.y+t*.4))*sin(2.7*n.z-t*.45)+.10*sin(6.0*n.y+4.0*n.x-t*.7)*sin(5.0*n.z+t*.6));}
+void main(){
+  vec3 n0=normalize(position);
+  vec3 t1=normalize(cross(n0,abs(n0.y)>.9?vec3(1.,0.,0.):vec3(0.,1.,0.)));vec3 t2=cross(n0,t1);
+  float e=.02;vec3 a1=normalize(n0+t1*e),a2=normalize(n0+t2*e);
+  vec3 q0=n0*(8.+disp(n0)),q1=a1*(8.+disp(a1)),q2=a2*(8.+disp(a2));
+  vec3 on=normalize(cross(q1-q0,q2-q0));
+  vec4 mv=modelViewMatrix*vec4(q0,1.);
+  vN=normalize(normalMatrix*on);vV=-mv.xyz;vP=n0;
+  gl_Position=projectionMatrix*mv;
+}`;
+const ORB_FS=`
+uniform float uTime;uniform float uGlow;uniform float uScroll;uniform vec3 uLight;
+varying vec3 vN;varying vec3 vV;varying vec3 vP;
+float h31(vec3 p){p=fract(p*.3183099+.1);p*=17.;return fract(p.x*p.y*p.z*(p.x+p.y+p.z));}
+vec3 ramp(float t){ // linear values: soft gray light spot, dim middle, near-black far side (matches the app, never white)
+  vec3 c=mix(vec3(.340),vec3(.255),smoothstep(0.,.16,t));
+  c=mix(c,vec3(.105),smoothstep(.16,.5,t));
+  c=mix(c,vec3(.020),smoothstep(.5,.86,t));
+  return mix(c,vec3(.003),smoothstep(.86,1.,t));
+}
+float arc(float a,float c,float w){float d=abs(mod(a-c+3.14159,6.28318)-3.14159);return smoothstep(w,w*.35,d);}
+void main(){
+  vec3 n=normalize(vN),v=normalize(vV),L=normalize(uLight);
+  float ndv=clamp(dot(n,v),0.,1.);
+  vec2 lc=vec2(-.28,.36)+L.xy*.07;
+  float d=clamp(length(n.xy-lc)/1.12,0.,1.);
+  vec3 col=ramp(d);
+  // polished silver: a dim studio reflected in the surface (brighter toward the top, strongest at the edge)
+  vec3 R=reflect(-v,n);
+  float sky=smoothstep(-.3,1.,R.y);
+  float F=.03+.97*pow(1.-ndv,4.);
+  col+=vec3(.20)*F*(.25+.75*sky);
+  // two soft window reflections (these give the glossy "sphere" read): upper right, lower left
+  float rs=sin(uScroll*.12)*.04;
+  vec2 U=vec2(.707,-.707),V=vec2(.707,.707);
+  vec2 q1=n.xy-vec2(.55+rs,.46),q2=n.xy-vec2(-.50,-.58+rs);
+  float w1=exp(-(pow(dot(q1,U)/.19,2.)+pow(dot(q1,V)/.05,2.)))*.40*smoothstep(.0,.2,ndv);
+  float w2=exp(-(pow(dot(q2,U)/.15,2.)+pow(dot(q2,V)/.045,2.)))*.30*smoothstep(.0,.2,ndv);
+  col+=(w1+w2)*(.8+.4*uGlow);
+  // gentle diagonal sheen across the lower half
+  col+=exp(-pow((n.x*.62+n.y*.78+.38)/.2,2.))*smoothstep(-.5,.4,n.x)*.035;
+  // thin, crisp rim arcs: upper-left soft, lower-right bright (they drift a little with scroll)
+  float ang=atan(n.y,n.x);
+  float thin=smoothstep(.80,.93,1.-ndv);
+  col+=thin*(arc(ang,2.35+sin(uScroll*.5)*.2,.40)*.30+arc(ang,-.85+sin(uScroll*.6+1.)*.22,.50)*.62);
+  col*=1.+(h31(vP*380.+uTime)-.5)*.015;
+  gl_FragColor=vec4(col,1.);
+  #include <tonemapping_fragment>
+  #include <colorspace_fragment>
+}`;
+const orbGroup=new THREE.Group();scene.add(orbGroup);
+const orbMesh=new THREE.Mesh(new THREE.SphereGeometry(8,192,192),new THREE.ShaderMaterial({uniforms:orbU,vertexShader:ORB_VS,fragmentShader:ORB_FS}));
+orbMesh.castShadow=true;orbGroup.add(orbMesh);
+const shellMat=new THREE.ShaderMaterial({transparent:true,side:THREE.BackSide,depthWrite:false,blending:THREE.AdditiveBlending,uniforms:{uGlow:orbU.uGlow},
+  vertexShader:'varying vec3 vN;void main(){vN=normalize(normalMatrix*normal);gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',
+  fragmentShader:'uniform float uGlow;varying vec3 vN;void main(){float i=pow(clamp(.66-dot(vN,vec3(0.,0.,1.)),0.,1.),3.2)*uGlow*1.25;gl_FragColor=vec4(vec3(.60,.66,.86)*i,i);}'});
+const shell=new THREE.Mesh(new THREE.SphereGeometry(8*1.26,96,96),shellMat);/* shell removed: a soft halo sprite gives the glow */
+const halo=new THREE.Sprite(new THREE.SpriteMaterial({map:(()=>{const c=document.createElement('canvas');c.width=c.height=256;const x=c.getContext('2d');const g=x.createRadialGradient(128,128,20,128,128,128);g.addColorStop(0,'rgba(190,192,200,.07)');g.addColorStop(.32,'rgba(160,162,172,.035)');g.addColorStop(.62,'rgba(120,122,130,.012)');g.addColorStop(1,'rgba(0,0,0,0)');x.fillStyle=g;x.fillRect(0,0,256,256);const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;return t})(),transparent:true,depthWrite:false,blending:THREE.AdditiveBlending}));
+halo.scale.set(40,40,1);orbGroup.add(halo);
+// orbital rings (always face the viewer) with tiny travelling dots
+const ringGrp=new THREE.Group();orbGroup.add(ringGrp);const ringDots=[];
+[[8*1.50,.20],[8*1.98,.07]].forEach(([r,o],i)=>{
+  ringGrp.add(new THREE.Mesh(new THREE.RingGeometry(r,r+.035,200),new THREE.MeshBasicMaterial({color:0xffffff,transparent:true,opacity:o,depthWrite:false,fog:false})));
+  const dm=new THREE.Mesh(new THREE.CircleGeometry(.11,16),new THREE.MeshBasicMaterial({color:0xffffff,transparent:true,opacity:o*2.2,depthWrite:false,fog:false}));ringGrp.add(dm);ringDots.push([dm,r,.06*(i%2?-1:1)*(1+i*.4),i*2.1])});
+// live HUD: scanning arc, tick ring and segmented arcs, all slowly turning (the JARVIS look)
+function hudTex(kind){
+  const S=1024,c=document.createElement('canvas');c.width=c.height=S;const x=c.getContext('2d');x.translate(S/2,S/2);const R=S*.46;x.lineCap='round';
+  if(kind==='ticks'){for(let i=0;i<180;i++){const a=i/180*Math.PI*2,mj=i%15===0,md=i%5===0,len=mj?24:md?15:7;x.strokeStyle=`rgba(255,255,255,${mj?.95:md?.6:.32})`;x.lineWidth=mj?2.6:1.4;x.beginPath();x.moveTo(Math.cos(a)*R,Math.sin(a)*R);x.lineTo(Math.cos(a)*(R+len),Math.sin(a)*(R+len));x.stroke()}}
+  if(kind==='seg'){[[0,.7],[.95,.32],[1.45,.18],[1.85,.95],[3.25,.45],[3.95,.22],[4.45,1.15]].forEach(([a0,l])=>{x.strokeStyle='rgba(255,255,255,.8)';x.lineWidth=5;x.beginPath();x.arc(0,0,R,a0,a0+l);x.stroke()});x.setLineDash([2,9]);x.strokeStyle='rgba(255,255,255,.45)';x.lineWidth=1.6;x.beginPath();x.arc(0,0,R-18,0,Math.PI*2);x.stroke()}
+  if(kind==='scan'){const N=120;for(let i=0;i<N;i++){const al=Math.pow(1-i/N,2.2)*.95;x.strokeStyle=`rgba(255,255,255,${al})`;x.lineWidth=5;x.beginPath();x.arc(0,0,R,-(i+1)*.011,-i*.011);x.stroke()}x.fillStyle='#fff';x.shadowColor='#fff';x.shadowBlur=16;x.beginPath();x.arc(R,0,6,0,7);x.fill()}
+  const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;t.anisotropy=MAXANI;return t}
+const hudMeshes=[];
+[['ticks',8*1.64,-.045,.5],['seg',8*1.80,.13,.55],['scan',8*1.50,.95,.8]].forEach(([k,rw,sp,op])=>{
+  const m=new THREE.Mesh(new THREE.PlaneGeometry(rw/.46,rw/.46),new THREE.MeshBasicMaterial({map:hudTex(k),transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,opacity:op,fog:false}));
+  ringGrp.add(m);hudMeshes.push([m,sp,op])});
+
+/* ---------------- 2D screen UI drawn from the app's real interface ---------------- */
+function orb2d(c,cx,cy,r,t){
+  c.save();c.shadowColor='rgba(255,255,255,.10)';c.shadowBlur=r*.8;c.beginPath();c.arc(cx,cy,r,0,7);c.fillStyle='#1a1a1a';c.fill();c.restore();
+  c.save();c.beginPath();c.arc(cx,cy,r,0,7);c.clip();
+  const g=c.createRadialGradient(cx-r*.30,cy-r*.34,1,cx-r*.30,cy-r*.34,r*1.25);
+  g.addColorStop(0,'#9a9a9a');g.addColorStop(.16,'#7e7e7e');g.addColorStop(.5,'#3a3a3a');g.addColorStop(.82,'#0d0d0d');g.addColorStop(1,'#000');
+  c.fillStyle=g;c.fillRect(cx-r,cy-r,r*2,r*2);
+  c.translate(cx,cy);c.rotate(-.6+t*.04);const lg=c.createLinearGradient(-r*.12,0,r*.12,0);lg.addColorStop(0,'rgba(255,255,255,0)');lg.addColorStop(.5,'rgba(255,255,255,.13)');lg.addColorStop(1,'rgba(255,255,255,0)');c.fillStyle=lg;c.fillRect(-r*.12,-r*.2,r*.24,r*1.3);c.rotate(.6-t*.04);c.translate(-cx,-cy);
+  const cl=(x,y,rx,ry,a,rot=0)=>{c.save();c.translate(cx+x*r,cy+y*r);c.rotate(rot);c.scale(1,ry/rx);const q=c.createRadialGradient(0,0,0,0,0,rx*r);q.addColorStop(0,`rgba(255,255,255,${a})`);q.addColorStop(1,'rgba(255,255,255,0)');c.fillStyle=q;c.beginPath();c.arc(0,0,rx*r,0,7);c.fill();c.restore()};
+  cl(.52,-.46,.17,.07,.5,.62);cl(-.55,.55,.14,.06,.36,.7);
+  c.restore();
+  c.save();c.lineCap='round';c.lineWidth=Math.max(1,r*.022);
+  c.strokeStyle='rgba(255,255,255,.5)';c.beginPath();c.arc(cx,cy,r-.6,Math.PI*1.08,Math.PI*1.38);c.stroke();
+  c.strokeStyle='rgba(255,255,255,.85)';c.lineWidth=Math.max(1.2,r*.028);c.beginPath();c.arc(cx,cy,r-.6,Math.PI*.05,Math.PI*.36);c.stroke();
+  c.restore();
+}
+const FONT=s=>`${s} -apple-system,"SF Pro Display",Inter,system-ui,sans-serif`;
+const rrect=(c,x,y,w,h,r)=>{c.beginPath();c.roundRect(x,y,w,h,r)};
+const fadeUp=(p,a,b,dy=14)=>{const q=sm(seg(p,a,b));return [q,(1-q)*dy]};
+
+function hud2d(c,cx,cy,R,t,a,lite){
+  if(a<=0)return;const k=R/128;c.save();c.translate(cx,cy);c.globalAlpha*=a;c.lineCap='round';
+  c.strokeStyle='rgba(255,255,255,.18)';c.lineWidth=Math.max(.8,k);c.beginPath();c.arc(0,0,R*1.5,0,7);c.stroke();
+  const sa=t*.9;for(let i=0;i<60;i++){c.strokeStyle=`rgba(255,255,255,${Math.pow(1-i/60,2)*.8})`;c.lineWidth=Math.max(1,2.2*k);c.beginPath();c.arc(0,0,R*1.5,sa-(i+1)*.02,sa-i*.02);c.stroke()}
+  c.fillStyle='#fff';c.shadowColor='#fff';c.shadowBlur=8*k;c.beginPath();c.arc(Math.cos(sa)*R*1.5,Math.sin(sa)*R*1.5,Math.max(1.2,2.6*k),0,7);c.fill();c.shadowBlur=0;
+  c.save();c.rotate(-t*.045);for(let i=0;i<120;i++){const an=i/120*Math.PI*2,mj=i%10===0,len=(mj?7:3.5)*k,r0=R*1.62;c.strokeStyle=`rgba(255,255,255,${mj?.7:.3})`;c.lineWidth=Math.max(.6,(mj?1.8:1)*k);c.beginPath();c.moveTo(Math.cos(an)*r0,Math.sin(an)*r0);c.lineTo(Math.cos(an)*(r0+len),Math.sin(an)*(r0+len));c.stroke()}c.restore();
+  if(!lite){c.save();c.rotate(t*.13);c.strokeStyle='rgba(255,255,255,.7)';c.lineWidth=Math.max(1,2.6*k);[[0,.7],[.95,.32],[1.45,.18],[1.85,.95],[3.25,.45],[3.95,.22],[4.45,1.15]].forEach(([a0,l])=>{c.beginPath();c.arc(0,0,R*1.78,a0,a0+l);c.stroke()});c.restore();
+    c.strokeStyle='rgba(255,255,255,.07)';c.lineWidth=Math.max(.8,k);c.beginPath();c.arc(0,0,R*1.98,0,7);c.stroke()}
+  c.restore()}
+
+/* iPhone screen: real screenshots of the app, crossfaded by scroll */
+const phoneCv=document.createElement('canvas');phoneCv.width=1170;phoneCv.height=2532;
+const pc=phoneCv.getContext('2d');
+const SCREENS=['add','home','tasks','day','day2','plan','home'].map(n=>{const im=new Image();im.src='screens/'+n+'.jpg';im.onload=()=>{lastP=-1};return im});
+const phoneBounds=[3.9,6.3,7.6,8.3,9.1,10.4];
+function drawPhone(t,time){
+  const c=pc;c.setTransform(1,0,0,1,0,0);c.globalAlpha=1;c.fillStyle='#000';c.fillRect(0,0,1170,2532);
+  SCREENS.forEach((im,i)=>{
+    const lo=i?phoneBounds[i-1]:-99,hi=i<SCREENS.length-1?phoneBounds[i]:99;
+    const w=sm(seg(t,lo-.25,lo+.25))*(1-sm(seg(t,hi-.25,hi+.25)));
+    if(w>.005&&im.complete&&im.naturalWidth){c.globalAlpha=w;c.drawImage(im,0,0,1170,2532)}});
+  c.globalAlpha=1;
+  // the Dynamic Island (screenshots don't include the hardware cutout)
+  c.fillStyle='#000';c.beginPath();c.roundRect(1170/2-190,33,380,112,56);c.fill();
+}
+const phoneTex=canvasTex(phoneCv);
+drawPhone(0,0);phoneTex.needsUpdate=true;
+
+/* ---------------- iPhone 3D ---------------- */
+const phone=new THREE.Group();scene.add(phone);
+{
+  const W=7.15,H=14.7,D=.78;
+  const ti=new THREE.MeshPhysicalMaterial({color:0xc4c0b8,metalness:1,roughness:.42,roughnessMap:noiseTex(512,110,40,6000),anisotropy:.6,anisotropyRotation:1.57,envMapIntensity:1.25,clearcoat:.15});
+  const frame=new THREE.Mesh(slab(W,H,1.1,D,.14),ti);frame.castShadow=true;phone.add(frame);
+  const back=new THREE.Mesh(rrPlane(W-.3,H-.3,1.0),new THREE.MeshPhysicalMaterial({color:0x2a2b2f,metalness:.2,roughness:.55,clearcoat:.6,clearcoatRoughness:.3,envMapIntensity:.9}));back.position.z=-D/2-.005;back.rotation.y=Math.PI;phone.add(back);
+  const cam1=new THREE.Mesh(new RoundedBoxGeometry(3.3,3.3,.12,4,.6),new THREE.MeshPhysicalMaterial({color:0x1a1b1e,metalness:.3,roughness:.3,clearcoat:1}));cam1.position.set(1.85,H/2-2.4,-D/2-.06);phone.add(cam1);
+  [[-.75,.75],[.75,.75],[0,-.75]].forEach(([x,y])=>{const l=new THREE.Mesh(new THREE.CylinderGeometry(.62,.66,.22,48),new THREE.MeshPhysicalMaterial({color:0x08080a,metalness:1,roughness:.22,envMapIntensity:1.2}));l.rotation.x=Math.PI/2;l.position.set(1.85+x,H/2-2.4+y,-D/2-.17);phone.add(l);
+    const gl=new THREE.Mesh(new THREE.CircleGeometry(.4,32),new THREE.MeshPhysicalMaterial({color:0x05070c,roughness:.03,metalness:0,clearcoat:1,envMapIntensity:2}));gl.position.set(1.85+x,H/2-2.4+y,-D/2-.285);gl.rotation.y=Math.PI;phone.add(gl)});
+  const scrM=new THREE.MeshBasicMaterial({map:phoneTex,toneMapped:false});
+  const scrn=new THREE.Mesh(rrPlane(W-.36,H-.36,.95),scrM);scrn.position.z=D/2+.004;phone.add(scrn);
+  const glass=new THREE.Mesh(rrPlane(W-.22,H-.22,1.02),new THREE.MeshPhysicalMaterial({color:0x000000,roughness:.03,metalness:0,transparent:true,opacity:.16,clearcoat:1,clearcoatRoughness:.02,envMapIntensity:2.4,depthWrite:false}));glass.position.z=D/2+.012;phone.add(glass);
+  [[H/2-3.0,.9,-1],[H/2-4.6,1.45,-1],[H/2-6.4,1.45,-1],[H/2-4.9,2.1,1]].forEach(([y,h,s])=>{const b=new THREE.Mesh(new RoundedBoxGeometry(.14,h,.32,3,.06),ti);b.position.set(s*(W/2+.04),y,0);phone.add(b)});
+}
+phone.position.set(70,14,0);
+
+/* ---------------- camera rig (keyframed, Catmull-Rom) ---------------- */
+const K=[ // each scene holds its composition (paired keys) so it settles, then eases to the next
+ {t:-.5,tg:[0,15,0],d:70,az:-14,el:3,ox:.3,oy:0},
+ {t:0,tg:[0,15,0],d:62,az:-10,el:3,ox:.3,oy:0},
+ {t:.7,tg:[0,15,0],d:60,az:-7,el:4,ox:.3,oy:0},
+ {t:1.05,tg:[0,15,0],d:58,az:18,el:8,ox:-.3,oy:0},
+ {t:1.75,tg:[0,15,0],d:56,az:23,el:9,ox:-.3,oy:0},
+ {t:2.15,tg:[0,15,0],d:50,az:-22,el:5,ox:.32,oy:0},
+ {t:2.85,tg:[0,15,0],d:48,az:-26,el:5,ox:.32,oy:0},
+ {t:3.5,tg:[35,14,0],d:78,az:-2,el:4,ox:0,oy:0},
+ {t:4.15,tg:[70,14,0],d:40,az:14,el:3,ox:-.3,oy:0},
+ {t:4.75,tg:[70,14,0],d:38,az:10,el:3,ox:-.3,oy:0},
+ {t:5.35,tg:[70,14,0],d:35,az:-10,el:2,ox:.28,oy:0},
+ {t:5.95,tg:[70,14,0],d:34,az:-14,el:2,ox:.28,oy:0},
+ {t:6.6,tg:[70,14,0],d:35,az:-12,el:3,ox:.3,oy:0},
+ {t:7.6,tg:[70,14,0],d:36,az:-8,el:4,ox:.3,oy:0},
+ {t:8.8,tg:[70,14,0],d:34,az:-14,el:3,ox:.3,oy:0},
+ {t:10.0,tg:[70,14,0],d:36,az:-9,el:4,ox:.3,oy:0},
+ {t:11.4,tg:[70,14,0],d:34,az:-13,el:3,ox:.3,oy:0},
+ {t:12.8,tg:[70,14,0],d:36,az:-8,el:3,ox:.3,oy:0},
+ {t:13.9,tg:[70,28,0],d:106,az:0,el:6,ox:0,oy:-.12},
+ {t:15.2,tg:[70,28,0],d:102,az:6,el:5,ox:0,oy:-.12},
+ {t:16.6,tg:[70,28,0],d:104,az:0,el:6,ox:0,oy:-.12},
+ {t:17.9,tg:[70,42,0],d:44,az:0,el:2,ox:0,oy:.13},
+ {t:19.5,tg:[70,42,0],d:40,az:0,el:2,ox:0,oy:.13},
+];
+// The orb's own path: it accompanies each section, settles beside the phone, then rises above it
+const OK=[
+ {t:-.5,x:0,y:15,z:0,s:1},
+ {t:.7,x:0,y:15,z:0,s:1},
+ {t:1.75,x:0,y:15,z:0,s:1},
+ {t:2.0,x:0,y:15,z:0,s:1},
+ {t:2.45,x:0,y:20,z:0,s:.45},
+ {t:2.95,x:0,y:20,z:0,s:.45},
+ {t:3.6,x:48,y:22,z:-10,s:.55},
+ {t:4.15,x:79,y:20,z:-4,s:.3},
+ {t:4.75,x:79,y:20,z:-4,s:.3},
+ {t:5.35,x:63,y:21,z:-4,s:.3},
+ {t:5.95,x:63,y:21,z:-4,s:.3},
+ {t:6.8,x:63,y:21,z:-4,s:.3},
+ {t:12.8,x:63,y:21,z:-4,s:.3},
+ {t:13.4,x:70,y:32,z:0,s:.4},
+ {t:14.2,x:70,y:50,z:0,s:.62},
+ {t:17.0,x:70,y:50,z:0,s:.62},
+ {t:17.9,x:70,y:47,z:0,s:.72},
+ {t:19.5,x:70,y:47,z:0,s:.72},
+];
+function sampleO(t){
+  t=clamp(t,OK[0].t,OK[OK.length-1].t);let i=0;while(i<OK.length-2&&t>OK[i+1].t)i++;
+  const a=OK[i],b=OK[i+1],h=b.t-a.t,u=(t-a.t)/h,p=OK[Math.max(0,i-1)],n=OK[Math.min(OK.length-1,i+2)],o={};
+  ['x','y','z','s'].forEach(g=>{const m0=(b[g]-p[g])/(b.t-p.t||1),m1=(n[g]-a[g])/(n.t-a.t||1);o[g]=herm(a[g],b[g],m0,m1,h,u)});
+  o.s=Math.max(0,o.s);return o;
+}
+const keys=['d','az','el','ox','oy'];
+function herm(p0,p1,m0,m1,h,u){const u2=u*u,u3=u2*u;return (2*u3-3*u2+1)*p0+(u3-2*u2+u)*h*m0+(-2*u3+3*u2)*p1+(u3-u2)*h*m1}
+function sampleK(t){
+  t=clamp(t,K[0].t,K[K.length-1].t);let i=0;while(i<K.length-2&&t>K[i+1].t)i++;
+  const a=K[i],b=K[i+1],h=b.t-a.t,u=(t-a.t)/h,p=K[Math.max(0,i-1)],n=K[Math.min(K.length-1,i+2)];
+  const out={tg:[0,0,0]};
+  keys.forEach(g=>{const m0=(b[g]-p[g])/(b.t-p.t||1),m1=(n[g]-a[g])/(n.t-a.t||1);out[g]=herm(a[g],b[g],m0,m1,h,u)});
+  for(let c=0;c<3;c++){const m0=(b.tg[c]-p.tg[c])/(b.t-p.t||1),m1=(n.tg[c]-a.tg[c])/(n.t-a.t||1);out.tg[c]=herm(a.tg[c],b.tg[c],m0,m1,h,u)}
+  return out;
+}
+const tmpV=new THREE.Vector3(),tmpR=new THREE.Vector3(),tmpU=new THREE.Vector3(),focus=new THREE.Vector3(0,0,0);
+const mouse={x:0,y:0,sx:0,sy:0};
+addEventListener('pointermove',e=>{mouse.x=e.clientX/innerWidth*2-1;mouse.y=e.clientY/innerHeight*2-1});
+function placeCamera(t,time){
+  const k=sampleK(t),portrait=cam.aspect<.9;const squarish=cam.aspect<1.55&&!portrait;if(squarish){k.d*=1.32;k.ox*=.85}
+  if(portrait)k.d*=lerp(1.4,1.8,sm(seg(t,13.2,14.2)));
+  const az=(k.az+mouse.sx*2.2+Math.sin(time*.13)*1.2)*Math.PI/180,el=(k.el-mouse.sy*1.4+Math.sin(time*.1)*.5)*Math.PI/180;
+  tmpV.set(Math.sin(az)*Math.cos(el),Math.sin(el),Math.cos(az)*Math.cos(el)).multiplyScalar(k.d);
+  const target=new THREE.Vector3(...k.tg);cam.position.copy(target).add(tmpV);cam.lookAt(target);cam.updateMatrixWorld();
+  const halfH=Math.tan(cam.fov*Math.PI/360)*k.d,halfW=halfH*cam.aspect;
+  const ox=portrait?0:k.ox,oy=portrait?.44:k.oy;
+  tmpR.setFromMatrixColumn(cam.matrixWorld,0);tmpU.setFromMatrixColumn(cam.matrixWorld,1);
+  const shift=tmpR.multiplyScalar(-ox*halfW).add(tmpU.multiplyScalar(-oy*halfH));
+  cam.position.add(shift);target.add(shift);cam.lookAt(target);
+  focus.x+=(k.tg[0]-focus.x)*.08;
+}
+
+/* ---------------- scene choreography ---------------- */
+let prevT=0,vel=0;
+const lightW=new THREE.Vector3(),camInv=new THREE.Matrix4();
+function stage(t,time,dt){
+  const o=sampleO(t);
+  if(cam.aspect<1.2){const kt=sampleK(t).tg;o.x=kt[0]+(o.x-kt[0])*.9;o.y=kt[1]+(o.y-kt[1])*.6}   // keep the orb in frame on narrow screens
+  if(cam.aspect<1.2)o.s*=1-.92*sm(seg(t,2.1,2.4))*(1-sm(seg(t,3.1,3.5)));   // on a phone the orb steps aside while the Add card is up
+  vel+=((Math.abs(t-prevT)/Math.max(dt,.001))-vel)*.04;prevT=t;   // scroll speed, smoothed
+  const sp=clamp(vel*.35);
+  const talk=0;
+  orbGroup.position.set(o.x,o.y+Math.sin(time*.45)*.12,o.z);
+  const breathe=1+Math.sin(time*.5)*.005+sp*.004;
+  orbGroup.scale.setScalar(Math.max(.0001,o.s*breathe));orbGroup.visible=o.s>.004;
+  // subtle rotation that follows the scroll, plus a slow idle drift
+  orbMesh.rotation.y=t*.3+time*.015;orbMesh.rotation.x=Math.sin(t*.7)*.22;orbMesh.rotation.z=Math.sin(t*.4)*.08;
+  ringGrp.quaternion.copy(cam.quaternion);hudMeshes.forEach(([m,sp,op],i)=>{m.rotation.z=time*sp*.35+(i===1?t*.05:0);m.material.opacity=op*(.92+.08*Math.sin(time*.5+i))});ringDots.forEach(([m,r,sp2,ph])=>{const a2=time*sp2*.4+ph;m.position.set(Math.cos(a2)*r,Math.sin(a2)*r,0)});
+  orbU.uTime.value=time*.35;orbU.uScroll.value=t;orbU.uAmp.value+=((1+sp*.15)-orbU.uAmp.value)*.03;
+
+  orbU.uGlow.value=.62+sm(seg(t,17.0,18.0))*.3+sp*.03;
+  // the key light walks around the orb as you scroll
+  const a=-.9+t*.26+mouse.sx*.35;lightW.set(Math.cos(a)*.65,.62+Math.sin(t*.5)*.12-mouse.sy*.2,Math.sin(a)*.65+.55).normalize();
+  camInv.copy(cam.matrixWorld).invert();orbU.uLight.value.copy(lightW).transformDirection(camInv);
+  const rise=sm(seg(t,2.9,4.2));
+  const ry=lerp(-.55,.22,sm(seg(t,3.2,4.4)))+sm(seg(t,4.9,5.7))*(-.5)-sm(seg(t,5.7,6.6))*(-.7)-sm(seg(t,13.0,14.0))*.42;
+  phone.position.set(70,lerp(3,14.5,rise)+Math.sin(time*.4)*.12-sm(seg(t,17.0,17.9))*45,0);
+  phone.rotation.set(Math.sin(time*.4)*.015-.04,ry+mouse.sx*.06,Math.sin(time*.3)*.01);
+  spot.position.set(focus.x+25,150,55);spot.target.position.set(focus.x,10,0);
+}
+let lastP=-1;
+function updateTextures(t,time,force){
+  if(force||(t>3&&t<19&&time-lastP>1/24)){drawPhone(t,time);phoneTex.needsUpdate=true;lastP=time}
+}
+
+/* ---------------- text beats ---------------- */
+const beats=[...document.querySelectorAll('.beat')].map(el=>{
+  const items=[...el.querySelectorAll('.eyebrow,h1,h2,p,li,.badge')];items.forEach(i=>i.classList.add('st'));
+  return {el,items,r:el.dataset.r.split(',').map(Number),mid:el.classList.contains('L')||el.classList.contains('R')}});
+const acEl=$('addcard'),acTxt=$('acTxt'),acT=[$('acT1'),$('acT2'),$('acT3')],AC_FULL='Math homework due Thursday';
+function addCard(t){
+  const o=sm(seg(t,2.0,2.35))*(1-sm(seg(t,3.1,3.4)));acEl.style.opacity=o.toFixed(3);
+  const p=seg(t,2.1,2.6);acTxt.textContent=AC_FULL.slice(0,Math.round(p*AC_FULL.length));
+  acT.forEach((el,i)=>{const e=sm(seg(t,2.62+i*.07,2.74+i*.07));el.style.opacity=e.toFixed(2);el.style.transform=`translateY(${((1-e)*8).toFixed(1)}px)`});
+}
+function beatsAt(t){beats.forEach(b=>{
+  const [a,z]=b.r,n=b.items.length;
+  const out=1-sm(seg(t,z-.3,z)),inn=sm(seg(t,a,a+.12));const o=out*inn;
+  b.el.style.opacity=o.toFixed(3);
+  b.el.style.transform=b.mid&&innerWidth>860?'translateY(-50%)':'none';
+  b.el.style.pointerEvents=o>.5?'auto':'none';
+  // each line fades in on its own as you scroll through the scene
+  const step=Math.min(.17,(z-a-.85)/Math.max(1,n));
+  b.items.forEach((el,k)=>{const st=a+.06+k*step,e=sm(seg(t,st,st+.3));el.style.opacity=e.toFixed(3);el.style.transform=`translateY(${((1-e)*12).toFixed(1)}px)`});
+})}
+
+/* ---------------- scroll ---------------- */
+const scroller=$('scroller');
+function sizeScroller(){scroller.style.height=(T_END*.7*innerHeight+innerHeight)+'px'}
+let target=0,cur=0;
+const maxS=()=>scroller.offsetHeight-innerHeight;
+function scrollT(){const m=maxS();return m>0?clamp(scrollY/m,0,1)*T_END:0}
+addEventListener('scroll',()=>{target=scrollT()},{passive:true});
+const dockLinks=[...document.querySelectorAll('#dock a')];
+dockLinks.forEach(a=>a.addEventListener('click',e=>{e.preventDefault();scrollTo({top:+a.dataset.t/T_END*maxS(),behavior:'smooth'})}));
+$('top').addEventListener('click',e=>{e.preventDefault();scrollTo({top:0,behavior:'smooth'})});
+const toPrivacy=e=>{e.preventDefault();scrollTo({top:$('privacy').offsetTop,behavior:'smooth'})};
+document.querySelectorAll('a[href="#privacy"]').forEach(a=>a.addEventListener('click',toPrivacy));
+$('toTop').addEventListener('click',e=>{e.preventDefault();scrollTo({top:0,behavior:'smooth'})});
+function chrome(t){
+  let ci=0;dockLinks.forEach((a,i)=>{if(t>=+a.dataset.t-.6)ci=i});dockLinks.forEach((a,i)=>a.classList.toggle('on',i===ci));
+  $('pfill').style.height=(clamp(t/T_END)*100)+'%';$('hint').style.opacity=clamp(1-t*2.5);
+}
+
+/* ---------------- loop ---------------- */
+function resize(){renderer.setSize(innerWidth,innerHeight,false);cam.aspect=innerWidth/innerHeight;cam.fov=cam.aspect<.9?42:32;cam.updateProjectionMatrix();sizeScroller();target=scrollT()}
+addEventListener('resize',resize);resize();
+let time=0,last=performance.now();
+function frame(now,forcedT){
+  const dt=Math.min(.05,(now-last)/1000);last=now;time+=dt;
+  mouse.sx+=(mouse.x-mouse.sx)*.04;mouse.sy+=(mouse.y-mouse.sy)*.04;
+  if(forcedT!==undefined){cur=forcedT;target=forcedT}else cur+=(target-cur)*(1-Math.pow(.0006,dt));
+  stage(cur,time,dt);placeCamera(cur,time);updateTextures(cur,time,forcedT!==undefined);beatsAt(cur);addCard(cur);chrome(cur);
+  renderer.render(scene,cam);
+}
+function loop(now){frame(now);requestAnimationFrame(loop)}
+window.__seek=t=>{time+=.016;frame(performance.now(),t)};
+target=scrollT();cur=target;
+frame(performance.now());
+setTimeout(()=>$('load').classList.add('off'),300);requestAnimationFrame(loop);
+</script>
+</body>
+</html>
