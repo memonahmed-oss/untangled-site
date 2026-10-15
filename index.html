@@ -21,14 +21,30 @@ img{display:block;max-width:100%}
 .nav .wrap{height:100%;display:flex;align-items:center;justify-content:space-between}
 .brand{display:flex;align-items:center;gap:10px;font-size:17px;font-weight:600;letter-spacing:-.01em;text-decoration:none}
 .brand i{width:16px;height:16px;border-radius:50%;background:radial-gradient(circle at 36% 30%,#f2f2f2,#9a9a9a 38%,#3a3a3a 72%,#111)}
-.nav ul{display:flex;gap:28px;list-style:none}
+.nav ul{display:flex;gap:30px;list-style:none}
 .nav a.l{font-size:13px;color:var(--muted);text-decoration:none;transition:color .2s}
-.nav a.l:hover{color:var(--text)}
+.nav a.l:hover,.nav a.l.on{color:var(--text)}
+.menu-btn{display:none;background:none;border:0;color:var(--text);font:inherit;font-size:14px;cursor:pointer;padding:8px 0 8px 12px;align-items:center;gap:8px}
+.menu-btn i{display:block;width:16px;height:9px;position:relative}
+.menu-btn i::before,.menu-btn i::after{content:"";position:absolute;left:0;right:0;height:1.5px;background:currentColor;border-radius:1px;transition:transform .25s,top .25s}
+.menu-btn i::before{top:0}.menu-btn i::after{top:7px}
+.nav.open .menu-btn i::before{top:3.5px;transform:rotate(45deg)}
+.nav.open .menu-btn i::after{top:3.5px;transform:rotate(-45deg)}
+section[id]{scroll-margin-top:60px}
+@media(max-width:760px){
+  .menu-btn{display:inline-flex}
+  .nav ul{position:absolute;top:52px;left:0;right:0;flex-direction:column;gap:0;background:rgba(0,0,0,.94);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);border-bottom:1px solid var(--line);padding:6px 24px 14px;opacity:0;visibility:hidden;transform:translateY(-6px);transition:opacity .25s,transform .25s,visibility .25s}
+  .nav.open ul{opacity:1;visibility:visible;transform:none}
+  .nav a.l{display:block;font-size:19px;color:var(--text);padding:13px 0;border-bottom:1px solid var(--line)}
+  .nav li:last-child a.l{border-bottom:0}
+}
 
 /* type */
 .eyebrow{font-size:14px;font-weight:600;color:var(--muted);letter-spacing:.01em;margin-bottom:14px}
 h1{font-size:clamp(46px,8.2vw,96px);line-height:1.02;letter-spacing:-.045em;font-weight:700}
 h2{font-size:clamp(32px,4.6vw,56px);line-height:1.07;letter-spacing:-.035em;font-weight:700}
+h1,h2{text-wrap:balance}
+.body,.lede{text-wrap:pretty}
 .lede{font-size:clamp(19px,2vw,24px);line-height:1.42;color:var(--muted);letter-spacing:-.01em;font-weight:400}
 .body{font-size:19px;line-height:1.5;color:var(--muted);letter-spacing:-.005em}
 .soon{display:inline-flex;align-items:center;gap:9px;margin-top:34px;padding:12px 22px;border-radius:999px;font-size:16px;font-weight:600;background:var(--text);color:#000}
@@ -55,7 +71,7 @@ h2{font-size:clamp(32px,4.6vw,56px);line-height:1.07;letter-spacing:-.035em;font
 .feature{padding:clamp(80px,12vw,150px) 0}
 .feature .wrap{display:grid;grid-template-columns:1fr 1fr;gap:clamp(40px,8vw,120px);align-items:center}
 .feature.flip .copy{order:2}
-.feature .copy h2{max-width:12ch}
+.feature .copy h2{max-width:15ch}
 .feature .copy .body{margin-top:22px;max-width:30em}
 .feature .art{display:flex;justify-content:center}
 .feature .art .phone{width:min(320px,70vw)}
@@ -119,16 +135,17 @@ footer a:hover{color:var(--text)}
 </style>
 </head>
 <body>
-<header class="nav"><div class="wrap">
-  <a class="brand" href="index.html"><i></i>Untangled</a>
-  <ul><li><a class="l" href="index.html#privacy">Privacy</a></li></ul>
+<header class="nav" id="nav"><div class="wrap">
+  <a class="brand" href="#"><i></i>Untangled</a>
+  <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="menuList">Menu<i></i></button>
+  <ul id="menuList"><li><a class="l" href="#add" data-s="add">+ Add</a></li><li><a class="l" href="#home" data-s="home">Home</a></li><li><a class="l" href="#tasks" data-s="tasks">Tasks</a></li><li><a class="l" href="#plan" data-s="plan">Plan</a></li><li><a class="l" href="#school" data-s="school">School</a></li><li><a class="l" href="#privacy" data-s="privacy">Privacy</a></li></ul>
 </div></header>
 
 <main>
 <section class="hero">
   <div class="wrap">
     <h1 class="rv">Your day, untangled.</h1>
-    <p class="lede rv">One app for your classes, homework, tests and everything else you have going on.</p>
+    <p class="lede rv">One app for your classes, homework, tests, and everything else you have going on.</p>
     <span class="soon rv"><svg class="ap" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"/></svg>Coming to the App Store soon</span>
   </div>
   <div class="stage rv">
@@ -141,11 +158,11 @@ footer a:hover{color:var(--text)}
 <section class="feature" id="add">
   <div class="wrap">
     <div class="copy rv">
-      <p class="eyebrow">Add</p>
-      <h2>Type it the way you’d say it.</h2>
-      <p class="body">Write “Math homework due Thursday” and Untangled works out that it’s school work, which class it’s for, and the day. Put a time, a place or a repeat in the same line and it picks those up too.</p>
+      <p class="eyebrow">+ Add</p>
+      <h2>Tap + and type it the way you’d say it.</h2>
+      <p class="body">Write “Math homework due Friday,” and Untangled works out that it’s school work, that it’s for Math, and which day it’s due. Add a time, a place, or a repeat in the same sentence, and it picks those up too.</p>
     </div>
-    <div class="art rv"><figure class="phone "><img src="screens/add.jpg" alt="Quick Add turning a typed sentence into a Math homework item" width="900" height="1957" loading="lazy"></figure></div>
+    <div class="art rv"><figure class="phone "><img src="screens/add.jpg" alt="Typing Math homework due Friday, which Untangled turns into a School item for Math due tomorrow" width="900" height="1957" loading="lazy"></figure></div>
   </div>
 </section>
 
@@ -154,9 +171,9 @@ footer a:hover{color:var(--text)}
     <div class="copy rv">
       <p class="eyebrow">Home</p>
       <h2>What’s happening now, and what’s next.</h2>
-      <p class="body">Home shows the class you’re in and how long is left, what’s due today, and the one thing worth doing next. It leaves everything else out of the way.</p>
+      <p class="body">Home shows the class you’re in and how many minutes are left, what’s due today, and the one thing worth doing next. Everything else stays out of the way.</p>
     </div>
-    <div class="art rv"><figure class="phone "><img src="screens/home.jpg" alt="Home screen" width="900" height="1957" loading="lazy"></figure></div>
+    <div class="art rv"><figure class="phone "><img src="screens/home.jpg" alt="Home screen showing Math with 10 minutes left, then the work due today" width="900" height="1957" loading="lazy"></figure></div>
   </div>
 </section>
 
@@ -164,12 +181,12 @@ footer a:hover{color:var(--text)}
   <div class="wrap">
     <div class="copy rv">
       <p class="eyebrow">Tasks and calendar</p>
-      <h2>Everything in one list. Every day on one clock.</h2>
-      <p class="body">Homework, tests, events, reminders and birthdays all live together. See them by day or by class, and swipe right to finish something. In the calendar, your classes run in a narrow column beside the rest of your day, so free time is easy to spot.</p>
+      <h2>Everything in one list, every day on one clock.</h2>
+      <p class="body">Homework, tests, events, reminders, and birthdays all live together. See them by day or by class, and swipe right to finish something. In the calendar, your classes run in a narrow column beside the rest of your day, so it’s easy to see when you’re free.</p>
     </div>
     <div class="duo rv">
-      <figure class="phone "><img src="screens/tasks.jpg" alt="Tasks list grouped by day" width="900" height="1957" loading="lazy"></figure>
-      <figure class="phone "><img src="screens/day2.jpg" alt="Calendar day view" width="900" height="1957" loading="lazy"></figure>
+      <figure class="phone "><img src="screens/tasks.jpg" alt="Tasks list showing what is due today and tomorrow" width="900" height="1957" loading="lazy"></figure>
+      <figure class="phone "><img src="screens/day2.jpg" alt="Calendar day view with classes beside events" width="900" height="1957" loading="lazy"></figure>
     </div>
   </div>
 </section>
@@ -179,9 +196,9 @@ footer a:hover{color:var(--text)}
     <div class="copy rv">
       <p class="eyebrow">Today’s plan</p>
       <h2>A plan for tonight’s homework.</h2>
-      <p class="body">Untangled puts tests first, then whatever is due soonest, and fits it into your homework time. Start now, pick a later time, or skip something for today. It never plans work over your bedtime.</p>
+      <p class="body">Untangled puts tests first, then whatever is due soonest, and fits the work into your homework time. Start now, pick a time later, or skip something for today. It never plans work over your bedtime.</p>
     </div>
-    <div class="art rv"><figure class="phone "><img src="screens/plan.jpg" alt="Today's plan with a suggested first task" width="900" height="1957" loading="lazy"></figure></div>
+    <div class="art rv"><figure class="phone "><img src="screens/plan.jpg" alt="Today's plan suggesting to study for tomorrow's Math test first" width="900" height="1957" loading="lazy"></figure></div>
   </div>
 </section>
 
@@ -189,11 +206,11 @@ footer a:hover{color:var(--text)}
   <div class="wrap">
     <div class="copy rv">
       <p class="eyebrow">School</p>
-      <h2>Your school day is built in.</h2>
+      <h2>Your school day, built in.</h2>
     </div>
     <div class="row">
-      <p class="body rv">Enter your periods once. Untangled shows the class you’re in and what comes after it on Home, on the Lock Screen and in the Dynamic Island. Half days and special schedules are covered too.</p>
-      <div class="card rv" style="margin-top:0"><img src="screens/school-card.jpg" alt="Home card showing Math with 30 minutes left, followed by what is due" loading="lazy" width="1126" height="575"></div>
+      <p class="body rv">Enter your periods once, and Home always shows the class you’re in, how many minutes are left, and what comes next. You’ll see it on the Lock Screen and in the Dynamic Island too, and half days and special schedules are covered.</p>
+      <div class="card rv" style="margin-top:0"><img src="screens/school-card.jpg" alt="Home card showing Math with 10 minutes left, the next class, and what is due" width="1126" height="575"></div>
     </div>
   </div>
 </section>
@@ -204,10 +221,10 @@ footer a:hover{color:var(--text)}
     <div class="grid rv">
       <div><h3>Widgets</h3><p>Next Up and a day timeline for your Home Screen and Lock Screen.</p></div>
       <div><h3>Reminders</h3><p>A reminder before something is due, at a time picked for you or one you choose.</p></div>
-      <div><h3>Sleep</h3><p>Set your bedtime and wake-up once. Plans and suggested times work around them.</p></div>
-      <div><h3>Class alerts</h3><p>A heads-up shortly before each class starts. Turn it off any time.</p></div>
-      <div><h3>Sync</h3><p>Sign in with Google and your list is on every device you use.</p></div>
-      <div><h3>Offline</h3><p>It works without a connection and catches up when you’re back.</p></div>
+      <div><h3>Sleep</h3><p>Set your bedtime and wake-up time once, and plans and suggested times work around them.</p></div>
+      <div><h3>Class alerts</h3><p>A heads-up a few minutes before each class starts. You can turn it off any time.</p></div>
+      <div><h3>Sync</h3><p>Sign in with Google, and your list is on every device you use.</p></div>
+      <div><h3>Offline</h3><p>It works without a connection, and catches up when you’re back online.</p></div>
     </div>
   </div>
 </section>
@@ -215,7 +232,7 @@ footer a:hover{color:var(--text)}
 <section class="privacy-sum">
   <div class="wrap">
     <h2 class="rv">Your data stays yours.</h2>
-    <p class="body rv">No ads and no tracking. Your list syncs to your own account and goes nowhere else. You can delete your account, and everything in it, from Settings.</p>
+    <p class="body rv">No ads and no tracking. Your list syncs to your own account and goes nowhere else, and you can delete your account, and everything in it, from Settings.</p>
     <a class="more rv" href="#privacy">Read the privacy policy</a>
   </div>
 </section>
@@ -303,6 +320,21 @@ footer a:hover{color:var(--text)}
 
 <script>
 document.documentElement.classList.add('js');
+(function(){
+  var nav=document.getElementById('nav'),btn=document.getElementById('menuBtn');
+  if(!nav||!btn)return;
+  function set(o){nav.classList.toggle('open',o);btn.setAttribute('aria-expanded',o?'true':'false')}
+  btn.addEventListener('click',function(){set(!nav.classList.contains('open'))});
+  nav.querySelectorAll('a.l').forEach(function(a){a.addEventListener('click',function(){set(false)})});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')set(false)});
+  document.addEventListener('click',function(e){if(!nav.contains(e.target))set(false)});
+  var links={};nav.querySelectorAll('a.l[data-s]').forEach(function(a){links[a.dataset.s]=a});
+  var ids=Object.keys(links).map(function(k){return document.getElementById(k)}).filter(Boolean);
+  if(!ids.length)return;
+  function upd(){var y=window.scrollY+120,cur=null;ids.forEach(function(el){if(el.offsetTop<=y)cur=el.id});
+    Object.keys(links).forEach(function(k){links[k].classList.toggle('on',k===cur)})}
+  addEventListener('scroll',upd,{passive:true});upd();
+})();
 (function(){
   var els=[].slice.call(document.querySelectorAll('.rv'));
   if(!('IntersectionObserver' in window)){els.forEach(function(e){e.classList.add('in')});return}

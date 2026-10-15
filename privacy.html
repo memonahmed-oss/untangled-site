@@ -21,14 +21,30 @@ img{display:block;max-width:100%}
 .nav .wrap{height:100%;display:flex;align-items:center;justify-content:space-between}
 .brand{display:flex;align-items:center;gap:10px;font-size:17px;font-weight:600;letter-spacing:-.01em;text-decoration:none}
 .brand i{width:16px;height:16px;border-radius:50%;background:radial-gradient(circle at 36% 30%,#f2f2f2,#9a9a9a 38%,#3a3a3a 72%,#111)}
-.nav ul{display:flex;gap:28px;list-style:none}
+.nav ul{display:flex;gap:30px;list-style:none}
 .nav a.l{font-size:13px;color:var(--muted);text-decoration:none;transition:color .2s}
-.nav a.l:hover{color:var(--text)}
+.nav a.l:hover,.nav a.l.on{color:var(--text)}
+.menu-btn{display:none;background:none;border:0;color:var(--text);font:inherit;font-size:14px;cursor:pointer;padding:8px 0 8px 12px;align-items:center;gap:8px}
+.menu-btn i{display:block;width:16px;height:9px;position:relative}
+.menu-btn i::before,.menu-btn i::after{content:"";position:absolute;left:0;right:0;height:1.5px;background:currentColor;border-radius:1px;transition:transform .25s,top .25s}
+.menu-btn i::before{top:0}.menu-btn i::after{top:7px}
+.nav.open .menu-btn i::before{top:3.5px;transform:rotate(45deg)}
+.nav.open .menu-btn i::after{top:3.5px;transform:rotate(-45deg)}
+section[id]{scroll-margin-top:60px}
+@media(max-width:760px){
+  .menu-btn{display:inline-flex}
+  .nav ul{position:absolute;top:52px;left:0;right:0;flex-direction:column;gap:0;background:rgba(0,0,0,.94);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);border-bottom:1px solid var(--line);padding:6px 24px 14px;opacity:0;visibility:hidden;transform:translateY(-6px);transition:opacity .25s,transform .25s,visibility .25s}
+  .nav.open ul{opacity:1;visibility:visible;transform:none}
+  .nav a.l{display:block;font-size:19px;color:var(--text);padding:13px 0;border-bottom:1px solid var(--line)}
+  .nav li:last-child a.l{border-bottom:0}
+}
 
 /* type */
 .eyebrow{font-size:14px;font-weight:600;color:var(--muted);letter-spacing:.01em;margin-bottom:14px}
 h1{font-size:clamp(46px,8.2vw,96px);line-height:1.02;letter-spacing:-.045em;font-weight:700}
 h2{font-size:clamp(32px,4.6vw,56px);line-height:1.07;letter-spacing:-.035em;font-weight:700}
+h1,h2{text-wrap:balance}
+.body,.lede{text-wrap:pretty}
 .lede{font-size:clamp(19px,2vw,24px);line-height:1.42;color:var(--muted);letter-spacing:-.01em;font-weight:400}
 .body{font-size:19px;line-height:1.5;color:var(--muted);letter-spacing:-.005em}
 .soon{display:inline-flex;align-items:center;gap:9px;margin-top:34px;padding:12px 22px;border-radius:999px;font-size:16px;font-weight:600;background:var(--text);color:#000}
@@ -55,7 +71,7 @@ h2{font-size:clamp(32px,4.6vw,56px);line-height:1.07;letter-spacing:-.035em;font
 .feature{padding:clamp(80px,12vw,150px) 0}
 .feature .wrap{display:grid;grid-template-columns:1fr 1fr;gap:clamp(40px,8vw,120px);align-items:center}
 .feature.flip .copy{order:2}
-.feature .copy h2{max-width:12ch}
+.feature .copy h2{max-width:15ch}
 .feature .copy .body{margin-top:22px;max-width:30em}
 .feature .art{display:flex;justify-content:center}
 .feature .art .phone{width:min(320px,70vw)}
@@ -119,9 +135,10 @@ footer a:hover{color:var(--text)}
 </style>
 </head>
 <body>
-<header class="nav"><div class="wrap">
+<header class="nav" id="nav"><div class="wrap">
   <a class="brand" href="index.html"><i></i>Untangled</a>
-  <ul><li><a class="l" href="index.html#privacy">Privacy</a></li></ul>
+  <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="menuList">Menu<i></i></button>
+  <ul id="menuList"><li><a class="l" href="index.html#add" data-s="add">+ Add</a></li><li><a class="l" href="index.html#home" data-s="home">Home</a></li><li><a class="l" href="index.html#tasks" data-s="tasks">Tasks</a></li><li><a class="l" href="index.html#plan" data-s="plan">Plan</a></li><li><a class="l" href="index.html#school" data-s="school">School</a></li><li><a class="l" href="index.html#privacy" data-s="privacy">Privacy</a></li></ul>
 </div></header>
 
 <main><section style="padding:64px 0 90px">
@@ -203,5 +220,30 @@ footer a:hover{color:var(--text)}
   <span>&copy; 2026 Ahmed Memon. Untangled is made for iPhone.</span>
   <span><a href="index.html#privacy">Privacy Policy</a> &nbsp;·&nbsp; <a href="mailto:untangledsupportteam@gmail.com">Contact</a></span>
 </div></footer>
+
+<script>
+document.documentElement.classList.add('js');
+(function(){
+  var nav=document.getElementById('nav'),btn=document.getElementById('menuBtn');
+  if(!nav||!btn)return;
+  function set(o){nav.classList.toggle('open',o);btn.setAttribute('aria-expanded',o?'true':'false')}
+  btn.addEventListener('click',function(){set(!nav.classList.contains('open'))});
+  nav.querySelectorAll('a.l').forEach(function(a){a.addEventListener('click',function(){set(false)})});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')set(false)});
+  document.addEventListener('click',function(e){if(!nav.contains(e.target))set(false)});
+  var links={};nav.querySelectorAll('a.l[data-s]').forEach(function(a){links[a.dataset.s]=a});
+  var ids=Object.keys(links).map(function(k){return document.getElementById(k)}).filter(Boolean);
+  if(!ids.length)return;
+  function upd(){var y=window.scrollY+120,cur=null;ids.forEach(function(el){if(el.offsetTop<=y)cur=el.id});
+    Object.keys(links).forEach(function(k){links[k].classList.toggle('on',k===cur)})}
+  addEventListener('scroll',upd,{passive:true});upd();
+})();
+(function(){
+  var els=[].slice.call(document.querySelectorAll('.rv'));
+  if(!('IntersectionObserver' in window)){els.forEach(function(e){e.classList.add('in')});return}
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{rootMargin:'0px 0px -8% 0px',threshold:.08});
+  els.forEach(function(e){io.observe(e)});
+})();
+</script>
 </body>
 </html>
