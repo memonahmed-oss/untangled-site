@@ -221,7 +221,7 @@ footer a:hover{color:var(--text)}
       <div><h3>Reminders</h3><p>A reminder before something is due, at a time picked for you or one you choose.</p></div>
       <div><h3>Sleep</h3><p>Set your bedtime and wake-up time once, and plans and suggested times work around them.</p></div>
       <div><h3>Class alerts</h3><p>A heads-up a few minutes before each class starts. You can turn it off any time.</p></div>
-      <div><h3>Sync</h3><p>Sign in with Google, and your list is on every device you use.</p></div>
+      <div><h3>Sync</h3><p>Sign in with Google or Apple, and your list is on every device you use.</p></div>
       <div><h3>Offline</h3><p>It works without a connection, and catches up when you’re back online.</p></div>
     </div>
   </div>
@@ -253,7 +253,7 @@ footer a:hover{color:var(--text)}
 <h2>1. Information we collect</h2>
 <table>
 <tr><th>Information</th><th>What it is</th><th>Why</th></tr>
-<tr><td><strong>Account information</strong></td><td>When you sign in with Google: your email address, the name you choose to use in the app, and a unique account ID. We do not receive your Google password.</td><td>To create your account, sign you in, and greet you by name.</td></tr>
+<tr><td><strong>Account information</strong></td><td>When you sign in with Google or Apple: your email address, the name you choose to use in the app, and a unique account ID. We never receive your Google or Apple password. If you use Apple's &ldquo;Hide My Email,&rdquo; we receive the private relay address Apple creates for you instead of your real email.</td><td>To create your account, sign you in, and greet you by name.</td></tr>
 <tr><td><strong>Your content</strong></td><td>Everything you enter: tasks, homework, tests, events, reminders, birthdays, titles, notes, subjects, places, dates and times, repeat rules, completion status, and planned work sessions.</td><td>To run the app and keep your items in sync between your devices.</td></tr>
 <tr><td><strong>Your settings</strong></td><td>Your School schedule (classes and times), sleep schedule, reminder and planning preferences, and similar choices.</td><td>To plan your day and keep your settings when you change phones.</td></tr>
 <tr><td><strong>Location</strong> (optional)</td><td>If you allow location access, the app reads your device's location while you use it, only to show the weather on Home. It asks iOS for a location accurate to about one kilometer, and it refreshes the weather at most about once an hour. The coordinates are sent to the weather service (see "Who we share information with") but are not saved to your Untangled account; only the weather summary and city name are kept on your phone. You can instead pick a city in Settings and never grant location access.</td><td>To show current weather.</td></tr>
@@ -273,7 +273,7 @@ footer a:hover{color:var(--text)}
   <li><strong>Supabase</strong> (supabase.com) &mdash; our backend. It hosts sign-in and the database that stores your account, items, and settings. Your data is protected so each account can only read and write its own rows.</li>
   <li><strong>Google</strong> &mdash; used only for "Sign in with Google". Google tells us your email address and name. Google's handling of your data is governed by <a href="https://policies.google.com/privacy">Google's Privacy Policy</a>.</li>
   <li><strong>Open-Meteo</strong> (open-meteo.com) &mdash; the weather service. If weather is shown, the app sends it the latitude and longitude of your device's location (or of the city you picked) and receives a forecast. Like any internet request, it also sees your IP address. It does not receive your name, email, or any of your items, and we do not link the request to your account.</li>
-  <li><strong>Apple</strong> &mdash; the app uses Apple's system services, including place lookup (to turn a city name into coordinates and coordinates into a city name), notifications, and iCloud/device backups, under <a href="https://www.apple.com/legal/privacy/">Apple's Privacy Policy</a>.</li>
+  <li><strong>Apple</strong> &mdash; the app uses Apple's system services, including Sign in with Apple (which tells us your email address, or a private relay address, and, the first time, your name), place lookup (to turn a city name into coordinates and coordinates into a city name), notifications, and iCloud/device backups, under <a href="https://www.apple.com/legal/privacy/">Apple's Privacy Policy</a>.</li>
 </ul>
 <p>We may also disclose information if required by law or to protect the rights, safety, or security of our users or the service.</p>
 
@@ -297,10 +297,10 @@ footer a:hover{color:var(--text)}
 <p>Data is sent over encrypted connections (HTTPS). Your sign-in is stored in the iOS Keychain. Our database allows each account to access only its own data. No system is perfectly secure, but we work to protect your information.</p>
 
 <h2>9. Children</h2>
-<p>Untangled is designed for students and may be used by teenagers. It is not directed to children under 13, and we do not knowingly collect personal information from children under 13 (or under the minimum age of digital consent in your country). If you believe a child has given us personal information, contact us and we will delete it. [CONFIRM: your intended minimum age. Sign-in with Google already requires users to meet Google's age requirements.]</p>
+<p>Untangled is designed for students and may be used by teenagers. It is not directed to children under 13, and we do not knowingly collect personal information from children under 13 (or under the minimum age of digital consent in your country). If you believe a child has given us personal information, contact us and we will delete it.</p>
 
 <h2>10. International transfers</h2>
-<p>Our providers may process data in the United States or other countries. By using the app you understand your information may be transferred to and stored in countries other than your own. [CONFIRM: your Supabase project's region.]</p>
+<p>Our providers may process data in the United States or other countries. By using the app you understand your information may be transferred to and stored in countries other than your own.</p>
 
 <h2>11. Changes to this policy</h2>
 <p>If we change this policy, we will update the date above and, for significant changes, tell you in the app. Continued use after a change means you accept the updated policy.</p>
