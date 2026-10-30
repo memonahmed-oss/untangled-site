@@ -144,9 +144,9 @@ footer a:hover{color:var(--text)}
 <main><section style="padding:64px 0 90px">
   <div class="wrap"><div class="doc">
 <h1 class="ph">Privacy Policy</h1>
-<p><strong>Effective date:</strong> October 15, 2026 &nbsp;·&nbsp; <strong>Last updated:</strong> October 15, 2026</p>
+<p><strong>Effective date:</strong> October 15, 2026 &nbsp;·&nbsp; <strong>Last updated:</strong> October 29, 2026</p>
 
-<p>Untangled ("the app", "we") is an iPhone app that helps you keep track of tasks, homework, events, and your school day. This policy explains what information the app collects, how it is used, who it is shared with, and the choices you have. It is operated by Ahmed Memon ("we"). Contact: <a href="mailto:untangledsupportteam@gmail.com">untangledsupportteam@gmail.com</a>.</p>
+<p>Untangled ("the app", "we") is an iPhone app that helps you keep track of tasks, homework, events, bills, lists, notes, and your school or work day. This policy explains what information the app collects, how it is used, who it is shared with, and the choices you have. It is operated by Ahmed Memon ("we"). Contact: <a href="mailto:untangledsupportteam@gmail.com">untangledsupportteam@gmail.com</a>.</p>
 
 <h2>The short version</h2>
 <ul>
@@ -160,15 +160,17 @@ footer a:hover{color:var(--text)}
 <table>
 <tr><th>Information</th><th>What it is</th><th>Why</th></tr>
 <tr><td><strong>Account information</strong></td><td>When you sign in with Google or Apple: your email address, the name you choose to use in the app, and a unique account ID. We never receive your Google or Apple password. If you use Apple's &ldquo;Hide My Email,&rdquo; we receive the private relay address Apple creates for you instead of your real email.</td><td>To create your account, sign you in, and greet you by name.</td></tr>
-<tr><td><strong>Your content</strong></td><td>Everything you enter: tasks, homework, tests, events, reminders, birthdays, titles, notes, subjects, places, dates and times, repeat rules, completion status, and planned work sessions.</td><td>To run the app and keep your items in sync between your devices.</td></tr>
-<tr><td><strong>Your settings</strong></td><td>Your School schedule (classes and times), sleep schedule, reminder and planning preferences, and similar choices.</td><td>To plan your day and keep your settings when you change phones.</td></tr>
+<tr><td><strong>Your content</strong></td><td>Everything you enter: tasks (and the steps inside them), homework, tests, events, reminders, birthdays, bills and their amounts, lists, notes, goals, titles, subjects, places, dates and times, repeat rules, completion status, and planned work sessions.</td><td>To run the app and keep your items in sync between your devices.</td></tr>
+<tr><td><strong>Your settings</strong></td><td>Your School schedule (classes and times), sleep schedule, work hours, reminder and planning preferences, your choice of Home layout, and similar choices.</td><td>To plan your day and keep your settings when you change phones.</td></tr>
 <tr><td><strong>Location</strong> (optional)</td><td>If you allow location access, the app reads your device's location while you use it, only to show the weather on Home. It asks iOS for a location accurate to about one kilometer, and it refreshes the weather at most about once an hour. The coordinates are sent to the weather service (see "Who we share information with") but are not saved to your Untangled account; only the weather summary and city name are kept on your phone. You can instead pick a city in Settings and never grant location access.</td><td>To show current weather.</td></tr>
+<tr><td><strong>Microphone and speech</strong> (optional)</td><td>If you tap the microphone in the Add box, the app listens only while it is on and turns your words into text using Apple's speech recognition. The recording is not sent to us and is not saved. Where your iPhone can do this on the device, it does; otherwise Apple processes the audio under Apple's privacy policy. The text it produces is only what you then choose to add as an item.</td><td>To let you add things by speaking.</td></tr>
+<tr><td><strong>Apple Calendar</strong> (optional)</td><td>If you turn on "Bring in my Apple Calendar," the app reads your calendar events for the next 90 days and shows them as items in Untangled; these are then part of your content and sync like anything else you add. If you turn on "Add my events to Apple Calendar," the app writes your timed events to your default calendar. Nothing is read or written unless you switch these on, and you can switch them off at any time (turning the import off removes the events it brought in).</td><td>To show your calendar alongside your day.</td></tr>
 <tr><td><strong>Connection data</strong></td><td>Like any internet service, our servers and the weather service receive your IP address and basic technical details when your phone connects.</td><td>To deliver the service and keep it secure.</td></tr>
 </table>
-<p>We do not collect your contacts, photos, microphone or camera data, health data, financial information, or advertising identifier.</p>
+<p>We do not collect your contacts, photos, camera data, health data, financial information, or advertising identifier. The microphone is used only while you dictate, as described above.</p>
 
 <h2>2. Information stored only on your phone</h2>
-<p>Some data never leaves your device: notification scheduling, the "last time" durations the app remembers for your work sessions, one-time tips you have seen, and a local copy of your items used by the app and its widgets and Lock Screen / Dynamic Island Live Activity (shared with the app through an on-device App Group container). Notifications are scheduled locally on your phone; we do not send push notifications from a server.</p>
+<p>Some data never leaves your device: notification scheduling, the "last time" durations the app remembers for your work sessions, one-time tips you have seen, and a local copy of your items used by the app and its widgets and Lock Screen / Dynamic Island Live Activity (shared with the app through an on-device App Group container). Asking Siri or Shortcuts to add something is handled on your phone by the app. Notifications are scheduled locally on your phone; we do not send push notifications from a server.</p>
 
 <h2>3. How we use information</h2>
 <p>We use your information only to provide and improve the app's features: signing you in, storing and syncing your items and settings, scheduling reminders on your device, planning your day, and showing weather. We do not use it for advertising, profiling, or sale.</p>
@@ -179,7 +181,7 @@ footer a:hover{color:var(--text)}
   <li><strong>Supabase</strong> (supabase.com) &mdash; our backend. It hosts sign-in and the database that stores your account, items, and settings. Your data is protected so each account can only read and write its own rows.</li>
   <li><strong>Google</strong> &mdash; used only for "Sign in with Google". Google tells us your email address and name. Google's handling of your data is governed by <a href="https://policies.google.com/privacy">Google's Privacy Policy</a>.</li>
   <li><strong>Open-Meteo</strong> (open-meteo.com) &mdash; the weather service. If weather is shown, the app sends it the latitude and longitude of your device's location (or of the city you picked) and receives a forecast. Like any internet request, it also sees your IP address. It does not receive your name, email, or any of your items, and we do not link the request to your account.</li>
-  <li><strong>Apple</strong> &mdash; the app uses Apple's system services, including Sign in with Apple (which tells us your email address, or a private relay address, and, the first time, your name), place lookup (to turn a city name into coordinates and coordinates into a city name), notifications, and iCloud/device backups, under <a href="https://www.apple.com/legal/privacy/">Apple's Privacy Policy</a>.</li>
+  <li><strong>Apple</strong> &mdash; the app uses Apple's system services, including Sign in with Apple (which tells us your email address, or a private relay address, and, the first time, your name), place lookup (to turn a city name into coordinates and coordinates into a city name), speech recognition for dictation, Siri and Shortcuts, calendar access, notifications, and iCloud/device backups, under <a href="https://www.apple.com/legal/privacy/">Apple's Privacy Policy</a>.</li>
 </ul>
 <p>We may also disclose information if required by law or to protect the rights, safety, or security of our users or the service.</p>
 
@@ -191,9 +193,10 @@ footer a:hover{color:var(--text)}
 
 <h2>7. Your choices and rights</h2>
 <ul>
-  <li><strong>Delete your account and data:</strong> in the app, go to Settings &rarr; Delete Account. This permanently deletes your account and your synced data from our servers and erases the app's data on that phone.</li>
-  <li><strong>Sign out:</strong> Settings &rarr; Sign Out. Your data stays in your account for the next time you sign in.</li>
+  <li><strong>Delete your account and data:</strong> in the app, tap your name on the More tab, then Delete Account. This permanently deletes your account and your synced data from our servers and erases the app's data on that phone.</li>
+  <li><strong>Log out:</strong> Settings &rarr; Log Out. Your data stays in your account for the next time you sign in.</li>
   <li><strong>Location:</strong> you can turn location off at any time in iOS Settings &rarr; Privacy &amp; Security &rarr; Location Services &rarr; Untangled, choose to share only an approximate location there, or pick a city manually in the app.</li>
+  <li><strong>Microphone, speech and calendar:</strong> turn each off any time in iOS Settings &rarr; Privacy &amp; Security &rarr; Microphone, Speech Recognition or Calendars &rarr; Untangled.</li>
   <li><strong>Notifications:</strong> manage them in iOS Settings &rarr; Notifications &rarr; Untangled.</li>
   <li><strong>Access or correction:</strong> your items and settings are visible and editable inside the app. For anything else, or if you cannot use the in-app deletion, email us at <a href="mailto:untangledsupportteam@gmail.com">untangledsupportteam@gmail.com</a> and we will respond within 30 days.</li>
 </ul>
